@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = AuthViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        if AuthManager.shared.isAuthorised || viewModel.authDidSucceed {
+            VStack {
+                Text("Hello")
+            }
+        } else {
+            AuthWebView(viewModel: viewModel).ignoresSafeArea()
         }
-        .padding()
     }
 }
 

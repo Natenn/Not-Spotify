@@ -1,0 +1,15 @@
+{
+  "originHash" : "1ef0ba3b143c9802abf8fbcd5b1e754723a7a8e7fc3fadd172c917d9629a25fa",
+  "pins" : [
+    {
+      "identity" : "swiftnetwork",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Natenn/SwiftNetwork",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0a7bbf190378d2ddd1121eab3fc6b59720a30803"
+      }
+    }
+  ],
+  "version" : 3
+}

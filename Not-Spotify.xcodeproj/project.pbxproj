@@ -3,8 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
+
+/* Begin PBXBuildFile section */
+		932B1D7F2C7644B400A28A39 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 932B1D7E2C7644B400A28A39 /* SwiftNetwork */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		932B1D5F2C76424200A28A39 /* PBXContainerItemProxy */ = {
@@ -40,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				932B1D7F2C7644B400A28A39 /* SwiftNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +105,7 @@
 			);
 			name = "Not-Spotify";
 			packageProductDependencies = (
+				932B1D7E2C7644B400A28A39 /* SwiftNetwork */,
 			);
 			productName = "Not-Spotify";
 			productReference = 932B1D4E2C76424000A28A39 /* Not-Spotify.app */;
@@ -183,6 +189,9 @@
 				Base,
 			);
 			mainGroup = 932B1D452C76424000A28A39;
+			packageReferences = (
+				932B1D7D2C7644B400A28A39 /* XCRemoteSwiftPackageReference "SwiftNetwork" */,
+			);
 			productRefGroup = 932B1D4F2C76424000A28A39 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -391,6 +400,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -420,6 +430,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -478,6 +489,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 34Q5ZDAS64;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "ge.naten.Not-SpotifyUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -495,6 +507,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 34Q5ZDAS64;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "ge.naten.Not-SpotifyUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -545,6 +558,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		932B1D7D2C7644B400A28A39 /* XCRemoteSwiftPackageReference "SwiftNetwork" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Natenn/SwiftNetwork";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		932B1D7E2C7644B400A28A39 /* SwiftNetwork */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 932B1D7D2C7644B400A28A39 /* XCRemoteSwiftPackageReference "SwiftNetwork" */;
+			productName = SwiftNetwork;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 932B1D462C76424000A28A39 /* Project object */;
 }
