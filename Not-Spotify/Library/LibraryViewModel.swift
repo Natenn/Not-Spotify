@@ -12,6 +12,8 @@ import Combine
 final class LibraryViewModel: ObservableObject {
     
     @Published var playlists: [SimplifiedPlaylistObject]?
+    @Published var tracks: [SavedTrackObject]?
+    @Published var favouriteTracksCount: Int?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -36,17 +38,17 @@ final class LibraryViewModel: ObservableObject {
     
     func fetchFavourites() {
         let request = Request(
-            endpoint: Endpoint.savedPlaylists,
+            endpoint: Endpoint.savedTracks,
             query: [
                 APIKeys.limit: offset,
                 APIKeys.offset: currentOffset,
             ]
         )
         
-        Network.shared.execute(request, expecting: PlaylistsResponse.self)
+        Network.shared.execute(request, expecting: TracksResponse.self)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
-                self?.playlists = response.items
-                self?.currentOffset += response.items.count
+                self?.tracks = response.items
+                self?.favouriteTracksCount = response.total
             }).store(in: &cancellables)
     }
     
