@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		932B1D7F2C7644B400A28A39 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 932B1D7E2C7644B400A28A39 /* SwiftNetwork */; };
+		930D63342C7BBFE500704225 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 930D63332C7BBFE500704225 /* SwiftNetwork */; };
 		9396B1DD2C7B6554005C1B75 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9396B1DC2C7B6554005C1B75 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				932B1D7F2C7644B400A28A39 /* SwiftNetwork in Frameworks */,
+				930D63342C7BBFE500704225 /* SwiftNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +108,7 @@
 			);
 			name = "Not-Spotify";
 			packageProductDependencies = (
-				932B1D7E2C7644B400A28A39 /* SwiftNetwork */,
+				930D63332C7BBFE500704225 /* SwiftNetwork */,
 			);
 			productName = "Not-Spotify";
 			productReference = 932B1D4E2C76424000A28A39 /* Not-Spotify.app */;
@@ -194,7 +194,7 @@
 			);
 			mainGroup = 932B1D452C76424000A28A39;
 			packageReferences = (
-				932B1D7D2C7644B400A28A39 /* XCRemoteSwiftPackageReference "SwiftNetwork" */,
+				930D63322C7BBFE500704225 /* XCRemoteSwiftPackageReference "SwiftNetwork" */,
 			);
 			productRefGroup = 932B1D4F2C76424000A28A39 /* Products */;
 			projectDirPath = "";
@@ -567,7 +567,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		932B1D7D2C7644B400A28A39 /* XCRemoteSwiftPackageReference "SwiftNetwork" */ = {
+		930D63322C7BBFE500704225 /* XCRemoteSwiftPackageReference "SwiftNetwork" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Natenn/SwiftNetwork";
 			requirement = {
@@ -578,9 +578,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		932B1D7E2C7644B400A28A39 /* SwiftNetwork */ = {
+		930D63332C7BBFE500704225 /* SwiftNetwork */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 932B1D7D2C7644B400A28A39 /* XCRemoteSwiftPackageReference "SwiftNetwork" */;
+			package = 930D63322C7BBFE500704225 /* XCRemoteSwiftPackageReference "SwiftNetwork" */;
 			productName = SwiftNetwork;
 		};
 /* End XCSwiftPackageProductDependency section */
