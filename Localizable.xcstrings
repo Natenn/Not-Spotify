@@ -1,0 +1,36 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Home" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "მთავარი"
+          }
+        }
+      }
+    },
+    "Library" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ბიბლიოთეკა"
+          }
+        }
+      }
+    },
+    "Search" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ძებნა"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

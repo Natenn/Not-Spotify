@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		932B1D7F2C7644B400A28A39 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 932B1D7E2C7644B400A28A39 /* SwiftNetwork */; };
+		9396B1DD2C7B6554005C1B75 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9396B1DC2C7B6554005C1B75 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		932B1D4E2C76424000A28A39 /* Not-Spotify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Not-Spotify.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		932B1D5E2C76424200A28A39 /* Not-SpotifyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Not-SpotifyTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		932B1D682C76424200A28A39 /* Not-SpotifyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Not-SpotifyUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9396B1DC2C7B6554005C1B75 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -68,6 +70,7 @@
 		932B1D452C76424000A28A39 = {
 			isa = PBXGroup;
 			children = (
+				9396B1DC2C7B6554005C1B75 /* Localizable.xcstrings */,
 				932B1D502C76424000A28A39 /* Not-Spotify */,
 				932B1D612C76424200A28A39 /* Not-SpotifyTests */,
 				932B1D6B2C76424200A28A39 /* Not-SpotifyUITests */,
@@ -187,6 +190,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"ka-GE",
 			);
 			mainGroup = 932B1D452C76424000A28A39;
 			packageReferences = (
@@ -208,6 +212,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9396B1DD2C7B6554005C1B75 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +329,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -380,6 +386,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
