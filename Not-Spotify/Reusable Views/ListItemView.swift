@@ -10,33 +10,54 @@ import SwiftUI
 struct ListItemView: View {
     let title: String
     let subtitle: String
-    var url: String
+    var url: String?
+    var systemName: String?
+
+    private let outerRadius = CGFloat(16)
+    private let height = CGFloat(80)
+    private let imageSize = CGFloat(64)
+    private let innerRadius = CGFloat(8)
+    private let padding = CGFloat(8)
 
     var body: some View {
         ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: outerRadius)
                 .fill(.quaternary)
-                .frame(width: .infinity, height: CGFloat(80))
+                .frame(height: height)
             HStack {
-                image(from: URL(string: url))
+                image(from: URL(string: url ?? ""))
                     .foregroundColor(.green)
-                    .frame(width: CGFloat(72), height: CGFloat(72))
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                    .frame(width: imageSize, height: imageSize)
+                    .clipShape(RoundedRectangle(cornerRadius: innerRadius))
                 VStack(alignment: .leading) {
                     Text(title)
+                        .lineLimit(2)
+                        .font(.system(size: 20).weight(.semibold))
                     Text(subtitle)
-                }
-            }.padding(4)
-        }.padding(16)
+                        .lineLimit(1)
+                        .foregroundStyle(.secondary)
+                }.padding([.leading], padding)
+            }.padding(padding)
+        }
     }
 
     private func image(from url: URL?) -> some View {
-        AsyncImage(url: url) { image in
-            image
-                .resizable()
-                .scaledToFill()
-        } placeholder: {
-            ProgressView()
+        if let systemName {
+            return AnyView(
+                Image(systemName: systemName)
+                    .foregroundColor(.green)
+                    .font(.system(size: 44))
+            )
         }
+
+        return AnyView(
+            AsyncImage(url: url) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                ProgressView()
+            }
+        )
     }
 }

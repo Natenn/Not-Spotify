@@ -12,9 +12,7 @@ struct ContentView: View {
 
     var body: some View {
         if AuthManager.shared.isAuthorised || viewModel.authDidSucceed {
-            VStack {
-                Text("Hello")
-            }
+            TabBarView()
         } else {
             AuthWebView(viewModel: viewModel).ignoresSafeArea()
         }

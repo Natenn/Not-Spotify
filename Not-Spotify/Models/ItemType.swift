@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+enum ItemType: String, Decodable {
+    case album = "album"
+    case playlist = "playlist"
+    case track = "track"
+    case artist = "artist"
+    case genre = "GENRE"
+}

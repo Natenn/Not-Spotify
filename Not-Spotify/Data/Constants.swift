@@ -41,21 +41,30 @@ enum BaseUrl {
 enum Endpoint {
     static let authorize = "authorize"
     static let authToken = "api/token"
+    static let savedPlaylists = "me/playlists"
+    static let savedTracks = "me/tracks"
 }
 
 // MARK: - APIKeys
 
 enum APIKeys {
+    // MARK: Auth
+
     static let clientId = "client_id"
     static let responseType = "response_type"
     static let redirectUri = "redirect_uri"
     static let showDialog = "show_dialog"
     static let code = "code"
     static let scope = "scope"
+    static let refreshToken = "refresh_token"
     static let authorizationCode = "authorization_code"
     static let grantType = "grant_type"
     static let authorization = "Authorization"
     static let contentType = "Content-Type"
+    
+    // MARK: General
+    static let limit = "limit"
+    static let offset = "offset"
 }
 
 // MARK: - UserScopes

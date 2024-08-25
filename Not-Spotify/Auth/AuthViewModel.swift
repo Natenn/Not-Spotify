@@ -17,6 +17,7 @@ final class AuthViewModel: ObservableObject {
     func getAuthorizationURL() -> URLRequest? {
         Request(
             baseUrl: BaseUrl.authBaseUrl,
+            version: nil,
             endpoint: Endpoint.authorize,
             query: [
                 APIKeys.clientId: APICredentials.clientId,
@@ -43,10 +44,11 @@ final class AuthViewModel: ObservableObject {
     func getAuthToken(from code: String) {
         let request = Request(
             baseUrl: BaseUrl.authBaseUrl,
+            version: nil,
             endpoint: Endpoint.authToken,
             method: .post,
             headers: [
-                APIKeys.authorization: getEncodedCredentials(),
+                APIKeys.authorization: AuthManager.shared.encodedCredentials,
                 APIKeys.contentType: Constants.contentType,
             ],
             query: [
@@ -68,16 +70,9 @@ final class AuthViewModel: ObservableObject {
                 },
                 receiveValue: { response in
                     AuthManager.shared.cacheUserDefaults(response)
+                    Config.main.authToken = "Bearer \(AuthManager.shared.accessToken)"
                 }
             ).store(in: &cancellables)
-    }
-
-    private func getEncodedCredentials() -> String {
-        let credentials = "\(APICredentials.clientId):\(APICredentials.clientSecret)"
-        let data = credentials.data(using: .utf8)
-        let baseString = data?.base64EncodedString() ?? ""
-
-        return "Basic \(baseString)"
     }
 
     deinit {
