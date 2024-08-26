@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - PlaylistsResponse
+
 struct PlaylistsResponse: Decodable {
     let href: String
     let limit: Int
@@ -16,6 +18,8 @@ struct PlaylistsResponse: Decodable {
     let total: Int
     let items: [SimplifiedPlaylistObject]
 }
+
+// MARK: - SimplifiedPlaylistObject
 
 struct SimplifiedPlaylistObject: Identifiable, Decodable {
     let collaborative: Bool
@@ -33,7 +37,24 @@ struct SimplifiedPlaylistObject: Identifiable, Decodable {
     let uri: String
 }
 
+// MARK: - Owner
+
 struct Owner: Decodable {
     let id: String
     let display_name: String?
+}
+
+extension SimplifiedPlaylistObject {
+    var subtitle: String {
+        let totalTracks = tracks.total ?? 0
+        var songCount = "\(totalTracks) song"
+        if totalTracks != 1 {
+            songCount.append("s")
+        }
+        return "\(owner.display_name ?? "") · \(songCount)"
+    }
+
+    var imageUrl: String? {
+        images.first?.url
+    }
 }

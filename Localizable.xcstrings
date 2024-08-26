@@ -23,6 +23,9 @@
         }
       }
     },
+    "Hello, World!" : {
+
+    },
     "Home" : {
       "extractionState" : "stale",
       "localizations" : {
