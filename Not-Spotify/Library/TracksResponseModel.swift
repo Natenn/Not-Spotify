@@ -28,7 +28,7 @@ struct SavedTrackObject: Decodable {
 
 // MARK: - Track
 
-struct Track: Decodable {
+struct Track: Identifiable, Decodable {
     let album: Album?
     let artists: [Artist]
     let external_urls: ExternalUrls

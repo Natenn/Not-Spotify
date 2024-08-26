@@ -17,19 +17,27 @@ struct LibraryView: View {
                 playlists
             }.padding(12)
         }.onAppear {
-            viewModel.fetchPlaylists()
-            viewModel.fetchFavourites()
+            if viewModel.playlists == nil {
+                viewModel.fetchPlaylists()
+            }
+            if viewModel.tracks == nil {
+                viewModel.fetchFavourites()
+            }
         }
     }
 
     private var favourites: some View {
+//        NavigationLink(destination: PlaylistView(name: "Favourites")) {
         ListItemView(title: "Favourites", subtitle: "\(viewModel.favouriteTracksCount ?? 0) favourite songs", systemName: "heart.fill")
+//        }.buttonStyle(PlainButtonStyle())
     }
 
     private var playlists: some View {
         LazyVGrid(columns: [GridItem()]) {
             ForEach(viewModel.playlists ?? []) { playlist in
-                ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
+                NavigationLink(destination: PlaylistView(viewModel: PlaylistViewModel(playlist: playlist), playlist: playlist)) {
+                    ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
+                }.buttonStyle(PlainButtonStyle())
             }
         }
     }
