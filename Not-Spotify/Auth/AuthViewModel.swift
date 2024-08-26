@@ -70,7 +70,7 @@ final class AuthViewModel: ObservableObject {
                 },
                 receiveValue: { response in
                     AuthManager.shared.cacheUserDefaults(response)
-                    Config.main.authToken = "Bearer \(AuthManager.shared.accessToken)"
+                    Network.shared.configureDefaultRequest()
                 }
             ).store(in: &cancellables)
     }
