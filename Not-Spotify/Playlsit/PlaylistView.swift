@@ -30,6 +30,9 @@ struct PlaylistView: View {
                 viewModel.fetchSongs()
             }
         }
+        .refreshable {
+            viewModel.refreshSongs()
+        }
     }
 }
 

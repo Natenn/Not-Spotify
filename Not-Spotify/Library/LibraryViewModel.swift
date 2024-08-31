@@ -22,7 +22,7 @@ final class LibraryViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
     
-    func fetchPlaylists() {
+    func fetchPlaylists(shouldOverwrite: Bool = false) {
         let request = Request(
             endpoint: Endpoint.savedPlaylists,
             query: [
@@ -33,7 +33,11 @@ final class LibraryViewModel: ObservableObject {
 
         Network.shared.execute(request, expecting: PlaylistsResponse.self)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
-                self?.playlists.append(contentsOf: response.items)
+                if shouldOverwrite {
+                    self?.playlists = response.items
+                } else {
+                    self?.playlists.append(contentsOf: response.items)
+                }
                 self?.currentOffset += response.items.count
                 self?.total = response.total
             }).store(in: &cancellables)
@@ -53,6 +57,12 @@ final class LibraryViewModel: ObservableObject {
                 self?.tracks = response.items
                 self?.favouriteTracksCount = response.total
             }).store(in: &cancellables)
+    }
+    
+    func refreshPlaylists() {
+        currentOffset = 0
+        fetchFavourites()
+        fetchPlaylists(shouldOverwrite: true)
     }
     
     var shouldFetchMorePlaylists: Bool {

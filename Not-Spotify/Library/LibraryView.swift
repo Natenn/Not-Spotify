@@ -16,7 +16,11 @@ struct LibraryView: View {
                 favourites
                 playlists
             }.padding(12)
-        }.task {
+        }
+        .refreshable {
+            viewModel.refreshPlaylists()
+        }
+        .task {
             if viewModel.playlists.isEmpty {
                 viewModel.fetchPlaylists()
             }
