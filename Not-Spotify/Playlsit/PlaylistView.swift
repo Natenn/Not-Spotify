@@ -15,8 +15,14 @@ struct PlaylistView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem()]) {
-                ForEach(viewModel.tracks ?? []) { track in
+                ForEach(viewModel.tracks) { track in
                     ListItemView(title: track.name, subtitle: track.artists.first?.name ?? "", url: track.album?.images.first?.url)
+                }
+
+                if !viewModel.tracks.isEmpty {
+                    ProgressView().task {
+                        viewModel.fetchSongs()
+                    }
                 }
             }
             .navigationTitle(playlist?.name ?? "")

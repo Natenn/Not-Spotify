@@ -12,7 +12,7 @@ import SwiftNetwork
 class PlaylistViewModel: ObservableObject {
     private var playlist: SimplifiedPlaylistObject
 
-    @Published var tracks: [Track]?
+    @Published var tracks: [Track] = []
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -24,6 +24,10 @@ class PlaylistViewModel: ObservableObject {
     private var currentOffset = 0
 
     func fetchSongs() {
+        guard let totalTracks = playlist.tracks.total, currentOffset < totalTracks else {
+            return
+        }
+
         let request = Request(
             endpoint: Endpoint.playlistTracks(playlistId: playlist.id),
             query: [
@@ -34,7 +38,8 @@ class PlaylistViewModel: ObservableObject {
 
         Network.shared.execute(request, expecting: TracksResponse.self)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
-                self?.tracks = response.items.map { $0.track }
+                self?.tracks.append(contentsOf: response.items.map { $0.track })
+                self?.currentOffset += response.items.count
             }).store(in: &cancellables)
     }
 
