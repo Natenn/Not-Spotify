@@ -13,7 +13,7 @@ struct Not_SpotifyApp: App {
         WindowGroup {
             ContentView()
                 .accentColor(.green)
-                .onAppear {
+                .task {
                     Network.shared.configureDefaultRequest()
                 }
         }

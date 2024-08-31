@@ -8,11 +8,34 @@
 import SwiftUI
 
 struct PlaylistView: View {
+    @StateObject var viewModel: PlaylistViewModel
+
+    var playlist: SimplifiedPlaylistObject?
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            LazyVGrid(columns: [GridItem()]) {
+                ForEach(viewModel.tracks) { track in
+                    ListItemView(title: track.name, subtitle: track.artists.first?.name ?? "", url: track.album?.images.first?.url)
+                }
+
+                if viewModel.shouldFetchMoreSongs {
+                    ProgressView().task {
+                        viewModel.fetchSongs()
+                    }
+                }
+            }
+            .navigationTitle(playlist?.name ?? "")
+            .task {
+                viewModel.fetchSongs()
+            }
+        }
+        .refreshable {
+            viewModel.refreshSongs()
+        }
     }
 }
 
-#Preview {
-    PlaylistView()
-}
+// #Preview {
+//    PlaylistView()
+// }

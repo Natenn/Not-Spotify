@@ -16,20 +16,40 @@ struct LibraryView: View {
                 favourites
                 playlists
             }.padding(12)
-        }.onAppear {
-            viewModel.fetchPlaylists()
-            viewModel.fetchFavourites()
+        }
+        .refreshable {
+            viewModel.refreshPlaylists()
+        }
+        .task {
+            if viewModel.playlists.isEmpty {
+                viewModel.fetchPlaylists()
+            }
+            if viewModel.tracks.isEmpty {
+                viewModel.fetchFavourites()
+            }
         }
     }
 
     private var favourites: some View {
+//        NavigationLink(destination: PlaylistView(name: "Favourites")) {
         ListItemView(title: "Favourites", subtitle: "\(viewModel.favouriteTracksCount ?? 0) favourite songs", systemName: "heart.fill")
+//        }.buttonStyle(PlainButtonStyle())
     }
 
     private var playlists: some View {
-        LazyVGrid(columns: [GridItem()]) {
-            ForEach(viewModel.playlists ?? []) { playlist in
-                ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
+        Group {
+            LazyVGrid(columns: [GridItem()]) {
+                ForEach(viewModel.playlists) { playlist in
+                    NavigationLink(destination: PlaylistView(viewModel: PlaylistViewModel(playlist: playlist), playlist: playlist)) {
+                        ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
+                    }.buttonStyle(PlainButtonStyle())
+                }
+            }
+
+            if viewModel.shouldFetchMorePlaylists {
+                ProgressView().task {
+                    viewModel.fetchPlaylists()
+                }
             }
         }
     }

@@ -43,6 +43,7 @@ enum Endpoint {
     static let authToken = "api/token"
     static let savedPlaylists = "me/playlists"
     static let savedTracks = "me/tracks"
+    static func playlistTracks(playlistId: String) -> String { "playlists/\(playlistId)/tracks" }
 }
 
 // MARK: - APIKeys
@@ -61,8 +62,9 @@ enum APIKeys {
     static let grantType = "grant_type"
     static let authorization = "Authorization"
     static let contentType = "Content-Type"
-    
+
     // MARK: General
+
     static let limit = "limit"
     static let offset = "offset"
 }
