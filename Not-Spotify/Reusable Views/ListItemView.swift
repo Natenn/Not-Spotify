@@ -14,31 +14,31 @@ struct ListItemView: View {
     var systemName: String?
 
     private let outerRadius = CGFloat(16)
-    private let height = CGFloat(80)
-    private let imageSize = CGFloat(64)
+    private let height = CGFloat(88)
+    private let imageSize = CGFloat(72)
     private let innerRadius = CGFloat(8)
     private let padding = CGFloat(8)
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: outerRadius)
-                .fill(.quaternary)
-                .frame(height: height)
-            HStack {
-                image(from: URL(string: url ?? ""))
-                    .foregroundColor(.green)
-                    .frame(width: imageSize, height: imageSize)
-                    .clipShape(RoundedRectangle(cornerRadius: innerRadius))
-                VStack(alignment: .leading) {
-                    Text(title)
-                        .lineLimit(2)
-                        .font(.system(size: 20).weight(.semibold))
-                    Text(subtitle)
-                        .lineLimit(1)
-                        .foregroundStyle(.secondary)
-                }.padding([.leading], padding)
-            }.padding(padding)
-        }
+        RoundedRectangle(cornerRadius: outerRadius)
+            .fill(.quaternary)
+            .frame(height: height)
+            .overlay(alignment: .leading) {
+                HStack {
+                    image(from: URL(string: url ?? ""))
+                        .foregroundColor(.green)
+                        .frame(width: imageSize, height: imageSize)
+                        .clipShape(RoundedRectangle(cornerRadius: innerRadius))
+                    VStack(alignment: .leading) {
+                        Text(title)
+                            .font(.system(size: 20).weight(.semibold))
+                            .lineLimit(2)
+                        Text(subtitle)
+                            .lineLimit(1)
+                            .foregroundStyle(.secondary)
+                    }.padding([.leading], padding)
+                }.padding(padding)
+            }
     }
 
     private func image(from url: URL?) -> some View {
