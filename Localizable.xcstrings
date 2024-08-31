@@ -1,39 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "^[%lld favourite songs](inflect: true)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ka-GE" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld ფავორიტი სიმღერა"
-          }
-        }
-      }
-    },
-    "Favourites" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ka-GE" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ფავორიტები"
-          }
-        }
-      }
-    },
-    "Home" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ka-GE" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "მთავარი"
-          }
-        }
-      }
-    },
     "Library" : {
       "localizations" : {
         "ka-GE" : {
@@ -45,7 +12,6 @@
       }
     },
     "Search" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {

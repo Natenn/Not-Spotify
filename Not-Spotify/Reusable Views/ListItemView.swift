@@ -36,7 +36,7 @@ struct ListItemView: View {
                         Text(subtitle)
                             .lineLimit(1)
                             .foregroundStyle(.secondary)
-                    }.padding([.leading], padding)
+                    }.padding(.leading, padding)
                 }.padding(padding)
             }
     }
