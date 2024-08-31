@@ -14,8 +14,8 @@ struct ListItemView: View {
     var systemName: String?
 
     private let outerRadius = CGFloat(16)
-    private let height = CGFloat(88)
-    private let imageSize = CGFloat(72)
+    private let height = CGFloat(80)
+    private let imageSize = CGFloat(64)
     private let innerRadius = CGFloat(8)
     private let padding = CGFloat(8)
 
