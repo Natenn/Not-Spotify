@@ -17,10 +17,10 @@ struct LibraryView: View {
                 playlists
             }.padding(12)
         }.task {
-            if viewModel.playlists == nil {
+            if viewModel.playlists.isEmpty {
                 viewModel.fetchPlaylists()
             }
-            if viewModel.tracks == nil {
+            if viewModel.tracks.isEmpty {
                 viewModel.fetchFavourites()
             }
         }
@@ -33,11 +33,19 @@ struct LibraryView: View {
     }
 
     private var playlists: some View {
-        LazyVGrid(columns: [GridItem()]) {
-            ForEach(viewModel.playlists ?? []) { playlist in
-                NavigationLink(destination: PlaylistView(viewModel: PlaylistViewModel(playlist: playlist), playlist: playlist)) {
-                    ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
-                }.buttonStyle(PlainButtonStyle())
+        Group {
+            LazyVGrid(columns: [GridItem()]) {
+                ForEach(viewModel.playlists) { playlist in
+                    NavigationLink(destination: PlaylistView(viewModel: PlaylistViewModel(playlist: playlist), playlist: playlist)) {
+                        ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
+                    }.buttonStyle(PlainButtonStyle())
+                }
+            }
+
+            if viewModel.shouldFetchMorePlaylists {
+                ProgressView().task {
+                    viewModel.fetchPlaylists()
+                }
             }
         }
     }

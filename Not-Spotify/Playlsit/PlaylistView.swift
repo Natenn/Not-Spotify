@@ -19,7 +19,7 @@ struct PlaylistView: View {
                     ListItemView(title: track.name, subtitle: track.artists.first?.name ?? "", url: track.album?.images.first?.url)
                 }
 
-                if !viewModel.tracks.isEmpty {
+                if viewModel.shouldFetchMoreSongs {
                     ProgressView().task {
                         viewModel.fetchSongs()
                     }

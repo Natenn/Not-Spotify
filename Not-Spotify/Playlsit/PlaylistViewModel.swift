@@ -42,6 +42,10 @@ class PlaylistViewModel: ObservableObject {
                 self?.currentOffset += response.items.count
             }).store(in: &cancellables)
     }
+    
+    var shouldFetchMoreSongs: Bool {
+        !tracks.isEmpty && currentOffset < playlist.tracks.total ?? 0
+    }
 
     deinit {
         cancellables.forEach { $0.cancel() }
