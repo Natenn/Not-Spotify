@@ -20,7 +20,7 @@ struct PlaylistView: View {
                 }
             }
             .navigationTitle(playlist?.name ?? "")
-            .onAppear {
+            .task {
                 viewModel.fetchSongs()
             }
         }

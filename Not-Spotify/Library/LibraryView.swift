@@ -16,7 +16,7 @@ struct LibraryView: View {
                 favourites
                 playlists
             }.padding(12)
-        }.onAppear {
+        }.task {
             if viewModel.playlists == nil {
                 viewModel.fetchPlaylists()
             }
