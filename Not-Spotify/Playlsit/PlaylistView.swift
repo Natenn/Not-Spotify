@@ -25,7 +25,7 @@ struct PlaylistView: View {
                     }
                 }
             }
-            .navigationTitle(playlist?.name ?? "")
+            .navigationTitle(viewModel.name)
             .task {
                 viewModel.fetchSongs()
             }
@@ -35,7 +35,3 @@ struct PlaylistView: View {
         }
     }
 }
-
-// #Preview {
-//    PlaylistView()
-// }

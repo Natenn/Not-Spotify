@@ -31,16 +31,38 @@ struct LibraryView: View {
     }
 
     private var favourites: some View {
-//        NavigationLink(destination: PlaylistView(name: "Favourites")) {
-        ListItemView(title: "Favourites", subtitle: "\(viewModel.favouriteTracksCount ?? 0) favourite songs", systemName: "heart.fill")
-//        }.buttonStyle(PlainButtonStyle())
+        let favourites = "Favourites"
+        
+        return NavigationLink(destination:
+            PlaylistView(
+                viewModel: PlaylistViewModel(
+                    name: favourites,
+                    total: viewModel.favouriteTracksCount,
+                    endpoint: Endpoint.savedTracks
+                )
+            )
+        ) {
+            ListItemView(
+                title: favourites,
+                subtitle: "\(viewModel.favouriteTracksCount) favourite songs",
+                systemName: "heart.fill"
+            )
+        }.buttonStyle(PlainButtonStyle())
     }
 
     private var playlists: some View {
         Group {
             LazyVGrid(columns: [GridItem()]) {
                 ForEach(viewModel.playlists) { playlist in
-                    NavigationLink(destination: PlaylistView(viewModel: PlaylistViewModel(playlist: playlist), playlist: playlist)) {
+                    NavigationLink(destination:
+                        PlaylistView(
+                            viewModel: PlaylistViewModel(
+                                name: playlist.name,
+                                total: playlist.tracks.total ?? 0,
+                                endpoint: Endpoint.playlistTracks(playlistId: playlist.id)
+                            )
+                        )
+                    ) {
                         ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
                     }.buttonStyle(PlainButtonStyle())
                 }

@@ -14,7 +14,7 @@ import SwiftNetwork
 final class LibraryViewModel: ObservableObject {
     @Published var playlists: [SimplifiedPlaylistObject] = []
     @Published var tracks: [SavedTrackObject] = []
-    @Published var favouriteTracksCount: Int?
+    @Published var favouriteTracksCount: Int = 0
 
     private var total = 0
     private let offset = 20

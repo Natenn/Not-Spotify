@@ -10,26 +10,30 @@ import Foundation
 import SwiftNetwork
 
 class PlaylistViewModel: ObservableObject {
-    private var playlist: SimplifiedPlaylistObject
-
     @Published var tracks: [Track] = []
 
     private var cancellables = Set<AnyCancellable>()
 
-    init(playlist: SimplifiedPlaylistObject) {
-        self.playlist = playlist
-    }
+    var total: Int
+    var endpoint: String
+    var name: String
 
     private let offset = 20
     private var currentOffset = 0
 
+    init(name: String, total: Int, endpoint: String) {
+        self.name = name
+        self.total = total
+        self.endpoint = endpoint
+    }
+
     func fetchSongs(shouldOverwrite: Bool = false) {
-        guard let totalTracks = playlist.tracks.total, currentOffset < totalTracks else {
+        guard currentOffset < total else {
             return
         }
 
         let request = Request(
-            endpoint: Endpoint.playlistTracks(playlistId: playlist.id),
+            endpoint: endpoint,
             query: [
                 APIKeys.limit: offset,
                 APIKeys.offset: currentOffset,
@@ -54,7 +58,7 @@ class PlaylistViewModel: ObservableObject {
     }
 
     var shouldFetchMoreSongs: Bool {
-        !tracks.isEmpty && currentOffset < playlist.tracks.total ?? 0
+        !tracks.isEmpty && currentOffset < total
     }
 
     deinit {
