@@ -25,7 +25,7 @@ struct TabBarView: View {
         }
         .safeAreaInset(edge: .bottom) {
             MiniPlayerView(title: "Play something", subtitle: "😅😅")
-                .padding(Constants.padding)
+                .padding([.top, .bottom], Constants.padding)
                 .offset(y: -tabBatHeight)
         }
     }
