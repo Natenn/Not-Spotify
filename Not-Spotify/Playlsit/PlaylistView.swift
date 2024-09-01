@@ -30,6 +30,9 @@ struct PlaylistView: View {
                 viewModel.fetchSongs()
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            Spacer().frame(height: Constants.height + Constants.padding)
+        }
         .refreshable {
             viewModel.refreshSongs()
         }

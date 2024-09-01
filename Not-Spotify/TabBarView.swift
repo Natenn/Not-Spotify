@@ -7,25 +7,31 @@
 
 import SwiftUI
 
+// MARK: - TabBarView
+
 struct TabBarView: View {
     var body: some View {
-        return TabView {
-//            Tab("Home", systemImage: "house") {
-//                NavigationStack {
-//                    LibraryView().navigationTitle("Home")
-//                }
-//            }
-//            Tab("Search", systemImage: "magnifyingglass") {
-//                NavigationStack {
-//                    LibraryView().navigationTitle("Search")
-//                }
-//            }
+        TabView {
             Tab("Library", systemImage: "books.vertical") {
                 NavigationStack {
                     LibraryView().navigationTitle("Library")
                 }
             }
+            Tab("Search", systemImage: "magnifyingglass") {
+                NavigationStack {
+                    LibraryView().navigationTitle("Search")
+                }
+            }
         }
+        .safeAreaInset(edge: .bottom) {
+            MiniPlayerView(title: "Play something", subtitle: "😅😅")
+                .padding(Constants.padding)
+                .offset(y: -tabBatHeight)
+        }
+    }
+
+    private var tabBatHeight: CGFloat {
+        UITabBarController().tabBar.frame.size.height
     }
 }
 

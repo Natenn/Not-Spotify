@@ -22,7 +22,7 @@ final class AuthViewModel: ObservableObject {
             query: [
                 APIKeys.clientId: APICredentials.clientId,
                 APIKeys.responseType: APIKeys.code,
-                APIKeys.redirectUri: Constants.redirectUri,
+                APIKeys.redirectUri: APIConstants.redirectUri,
                 APIKeys.showDialog: true,
                 APIKeys.scope: UserScopes.getAllUserScopes(),
             ]
@@ -49,12 +49,12 @@ final class AuthViewModel: ObservableObject {
             method: .post,
             headers: [
                 APIKeys.authorization: AuthManager.shared.encodedCredentials,
-                APIKeys.contentType: Constants.contentType,
+                APIKeys.contentType: APIConstants.contentType,
             ],
             query: [
                 APIKeys.grantType: APIKeys.authorizationCode,
                 APIKeys.code: code,
-                APIKeys.redirectUri: Constants.redirectUri,
+                APIKeys.redirectUri: APIConstants.redirectUri,
             ]
         )
 
