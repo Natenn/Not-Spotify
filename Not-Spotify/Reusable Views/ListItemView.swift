@@ -38,22 +38,18 @@ struct ListItemView: View {
     }
 
     private func image(from url: URL?) -> some View {
-        if let systemName {
-            return AnyView(
+        AsyncImage(url: url) { image in
+            image
+                .resizable()
+                .scaledToFill()
+        } placeholder: {
+            if let systemName {
                 Image(systemName: systemName)
                     .foregroundColor(.green)
                     .font(.system(size: Constants.magicNumber))
-            )
-        }
-
-        return AnyView(
-            AsyncImage(url: url) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
+            } else {
                 ProgressView()
             }
-        )
+        }
     }
 }

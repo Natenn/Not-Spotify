@@ -17,6 +17,13 @@ struct PlaylistView: View {
             LazyVGrid(columns: [GridItem()]) {
                 ForEach(viewModel.tracks) { track in
                     ListItemView(title: track.name, subtitle: track.artists.first?.name ?? "", url: track.album?.images.first?.url)
+                        .onTapGesture {
+                            guard track.preview_url != nil else {
+                                return
+                            }
+
+                            PlayerViewModel.shared.play(track: track)
+                        }
                 }
 
                 if viewModel.shouldFetchMoreSongs {

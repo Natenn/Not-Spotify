@@ -8,10 +8,7 @@
 import SwiftUI
 
 struct MiniPlayerView: View {
-    let title: String
-    let subtitle: String
-    var url: String?
-    var systemName: String?
+    @StateObject private var viewModel = PlayerViewModel.shared
 
     var body: some View {
         RoundedRectangle(cornerRadius: Constants.outerRadius)
@@ -19,12 +16,18 @@ struct MiniPlayerView: View {
             .frame(height: Constants.height)
             .overlay(alignment: .leading) {
                 HStack {
-                    ListItemView(title: title, subtitle: subtitle, systemName: "waveform", isFilled: false)
+                    ListItemView(
+                        title: viewModel.trackInfo.name,
+                        subtitle: viewModel.trackInfo.artist,
+                        url: viewModel.trackInfo.imageUrl,
+                        systemName: "waveform",
+                        isFilled: false
+                    )
                     Group {
                         Button(action: {}) {
-                            Image(systemName: "play.fill")
+                            Image(systemName: viewModel.playButtonInfo.systemName)
                                 .font(.system(size: Constants.magicNumber))
-                        }.disabled(true)
+                        }.disabled(!viewModel.playButtonInfo.isEnabled)
                         Button(action: {}) {
                             Image(systemName: "forward.fill")
                                 .font(.system(size: Constants.magicNumber * 0.66))
@@ -36,5 +39,5 @@ struct MiniPlayerView: View {
 }
 
 #Preview {
-    MiniPlayerView(title: "Play Something", subtitle: "😅😅")
+    MiniPlayerView()
 }
