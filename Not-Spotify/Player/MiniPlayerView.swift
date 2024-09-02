@@ -24,7 +24,7 @@ struct MiniPlayerView: View {
                         isFilled: false
                     )
                     Group {
-                        Button(action: {}) {
+                        Button(action: viewModel.togglePlayback) {
                             Image(systemName: viewModel.playButtonInfo.systemName)
                                 .font(.system(size: Constants.magicNumber))
                         }.disabled(!viewModel.playButtonInfo.isEnabled)
