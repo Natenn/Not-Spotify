@@ -114,6 +114,8 @@ class PlayerViewModel: ObservableObject {
     }
 
     func play(tracks: [Track]) { // TODO: Implement
+        index = -1
+        
         self.tracks = tracks.compactMap {
             guard $0.preview_url != nil else {
                 return nil
@@ -157,7 +159,9 @@ class PlayerViewModel: ObservableObject {
     }
     
     func playNext() {
-        // TODO: Implement
+        if hasNext {
+            player?.advanceToNextItem()
+        }
     }
 
     private func addPublishers(currentItemCompletion: @escaping (AVPlayerItem?) -> Void) {

@@ -11,6 +11,16 @@
         }
       }
     },
+    "Play" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ჩართვა"
+          }
+        }
+      }
+    },
     "Search" : {
       "localizations" : {
         "ka-GE" : {
