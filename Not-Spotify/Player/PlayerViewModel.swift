@@ -26,6 +26,7 @@ class PlayerViewModel: ObservableObject {
 
     @Published private(set) var currentItem: AVPlayerItem?
     @Published private(set) var rate: Float?
+    @Published private(set) var currentProgress: Float?
 
     var trackInfo: TrackInfo {
         guard !tracks.isEmpty else {
@@ -62,6 +63,22 @@ class PlayerViewModel: ObservableObject {
     var isPlaying: Bool {
         player?.rate != 0.0 && player != nil && player?.currentItem != nil
     }
+    
+    var hasNext: Bool {
+        guard player != nil else {
+            return false
+        }
+        
+        if tracks.count <= 1 {
+            return false
+        }
+        
+        if index < tracks.count - 1 {
+            return true
+        }
+        
+        return false
+    }
 
     var trackDuration: Float {
         guard let duration = player?.currentItem?.duration.seconds, duration >= .zero, !duration.isNaN else {
@@ -72,7 +89,11 @@ class PlayerViewModel: ObservableObject {
     }
 
     var currentTime: Float {
-        return Float(player?.currentItem?.currentTime().seconds ?? .zero)
+        Float(player?.currentItem?.currentTime().seconds ?? .zero)
+    }
+
+    var progress: Float {
+        currentTime / trackDuration
     }
 
     func play(track: Track) {
@@ -92,7 +113,7 @@ class PlayerViewModel: ObservableObject {
         player?.play()
     }
 
-    func play(tracks: [Track]) {
+    func play(tracks: [Track]) { // TODO: Implement
         self.tracks = tracks.compactMap {
             guard $0.preview_url != nil else {
                 return nil
@@ -134,6 +155,10 @@ class PlayerViewModel: ObservableObject {
             player?.play()
         }
     }
+    
+    func playNext() {
+        // TODO: Implement
+    }
 
     private func addPublishers(currentItemCompletion: @escaping (AVPlayerItem?) -> Void) {
         addPlayerPublisher(for: \.currentItem, completion: currentItemCompletion)
@@ -141,6 +166,13 @@ class PlayerViewModel: ObservableObject {
         addPlayerPublisher(for: \.rate) { [weak self] rate in
             self?.rate = rate
         }
+
+        Timer.publish(every: 0.001, on: RunLoop.main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.currentProgress = self?.progress
+            }
+            .store(in: &cancellables)
     }
 
     private func addPlayerPublisher<T>(
