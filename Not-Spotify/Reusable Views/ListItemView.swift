@@ -21,7 +21,7 @@ struct ListItemView: View {
             .frame(height: Constants.height)
             .overlay(alignment: .leading) {
                 HStack {
-                    image(from: URL(string: url ?? ""))
+                    ImageView(url: URL(string: url ?? ""), systemName: systemName)
                         .foregroundColor(.green)
                         .frame(width: Constants.imageSize, height: Constants.imageSize)
                         .clipShape(RoundedRectangle(cornerRadius: Constants.innerRadius))
@@ -35,21 +35,5 @@ struct ListItemView: View {
                     }
                 }.padding(Constants.padding)
             }
-    }
-
-    private func image(from url: URL?) -> some View {
-        AsyncImage(url: url) { image in
-            image
-                .resizable()
-                .scaledToFill()
-        } placeholder: {
-            if let systemName {
-                Image(systemName: systemName)
-                    .foregroundColor(.green)
-                    .font(.system(size: Constants.magicNumber))
-            } else {
-                ProgressView()
-            }
-        }
     }
 }

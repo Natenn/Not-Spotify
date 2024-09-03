@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import SwiftNetwork
 
-class PlayerViewModel: ObservableObject {
+final class PlayerViewModel: ObservableObject {
     static let shared = PlayerViewModel()
 
     private init() {}
@@ -30,23 +30,24 @@ class PlayerViewModel: ObservableObject {
 
     @Published private(set) var currentItem: AVPlayerItem?
     @Published private(set) var rate: Float?
-    @Published private(set) var currentProgress: Float?
+    @Published var currentProgress: Float = 0.0
 
     var trackInfo: TrackInfo {
         guard !tracks.isEmpty else {
-            return TrackInfo(name: "Play Something", artist: "😅😅", imageUrl: nil)
+            return TrackInfo(id: "-1", name: "Play Something", artist: "😅😅", imageUrl: "")
         }
 
         guard index >= 0, index < tracks.count else {
-            return TrackInfo(name: "Oops", artist: "😅😅", imageUrl: nil)
+            return TrackInfo(id: "-2", name: "Oops", artist: "😅😅", imageUrl: "")
         }
 
         let track = tracks[index]
 
         return TrackInfo(
+            id: track.id,
             name: track.name,
             artist: track.artists.first?.name ?? "😅😅",
-            imageUrl: track.album?.images.first?.url
+            imageUrl: track.album?.images.first?.url ?? ""
         )
     }
 
@@ -71,7 +72,7 @@ class PlayerViewModel: ObservableObject {
     }
 
     var canReplay: Bool {
-        canPlay && !hasNext
+        canPlay && !hasNext && player?.currentItem == nil
     }
 
     var hasNext: Bool {
@@ -252,7 +253,7 @@ class PlayerViewModel: ObservableObject {
         Timer.publish(every: 0.001, on: RunLoop.main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.currentProgress = self?.progress
+                self?.currentProgress = self?.progress ?? 0.0
             }
             .store(in: &cancellables)
     }
