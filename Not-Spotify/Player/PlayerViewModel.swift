@@ -138,7 +138,9 @@ class PlayerViewModel: ObservableObject {
 
         addPublishers { [weak self] item in
             self?.currentItem = item
-            self?.index += 1
+            if item != nil {
+                self?.index += 1
+            }
         }
 
         player?.play()
