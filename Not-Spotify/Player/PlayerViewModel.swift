@@ -10,8 +10,6 @@ import Combine
 import Foundation
 import SwiftNetwork
 
-// MARK: - PlayerViewModel
-
 class PlayerViewModel: ObservableObject {
     static let shared = PlayerViewModel()
 

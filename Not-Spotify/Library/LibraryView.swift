@@ -15,7 +15,7 @@ struct LibraryView: View {
             Group {
                 favourites
                 playlists
-            }.padding(12)
+            }.padding(Constants.largerPadding)
         }
         .safeAreaInset(edge: .bottom) {
             Spacer().frame(height: Constants.height + Constants.padding)

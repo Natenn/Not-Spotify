@@ -35,6 +35,7 @@ struct PlaylistView: View {
                     }
                 }
             }
+            .padding(Constants.largerPadding)
             .navigationTitle(viewModel.name)
             .toolbar {
                 Button("Play") {

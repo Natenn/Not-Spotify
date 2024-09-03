@@ -13,5 +13,6 @@ struct Constants {
     static let imageSize = CGFloat(64)
     static let innerRadius = CGFloat(8)
     static let padding = CGFloat(8)
+    static let largerPadding = CGFloat(12)
     static let magicNumber = CGFloat(44)
 }
