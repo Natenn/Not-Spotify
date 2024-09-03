@@ -33,14 +33,14 @@ struct SimplifiedPlaylistObject: Identifiable, Decodable {
     let `public`: Bool?
     let snapshot_id: String
     let tracks: Tracks
-    let type: ItemType
+    let type: String
     let uri: String
 }
 
 // MARK: - Owner
 
 struct Owner: Decodable {
-    let id: String
+    let id: String?
     let display_name: String?
 }
 

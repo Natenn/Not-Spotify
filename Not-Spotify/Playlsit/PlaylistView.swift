@@ -18,7 +18,7 @@ struct PlaylistView: View {
                 ForEach(viewModel.tracks) { track in
                     let artist = track.artists.first?.name ?? ""
                     let imageUrl = track.album?.images.first?.url
-                    
+
                     ListItemView(title: track.name, subtitle: artist, url: imageUrl)
                         .onTapGesture {
                             guard track.preview_url != nil else {
@@ -38,7 +38,10 @@ struct PlaylistView: View {
             .navigationTitle(viewModel.name)
             .toolbar {
                 Button("Play") {
-                    PlayerViewModel.shared.play(tracks: viewModel.tracks)
+                    PlayerViewModel.shared.play(
+                        tracks: viewModel.tracks,
+                        from: viewModel
+                    )
                 }
             }
             .task {

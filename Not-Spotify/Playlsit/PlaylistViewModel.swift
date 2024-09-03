@@ -19,7 +19,7 @@ class PlaylistViewModel: ObservableObject {
     var name: String
 
     private let offset = 20
-    private var currentOffset = 0
+    private(set) var currentOffset = 0
 
     init(name: String, total: Int, endpoint: String) {
         self.name = name
