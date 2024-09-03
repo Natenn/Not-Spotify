@@ -74,7 +74,7 @@ final class AuthManager: ObservableObject {
             method: .post,
             headers: [
                 APIKeys.authorization: encodedCredentials,
-                APIKeys.contentType: Constants.contentType,
+                APIKeys.contentType: APIConstants.contentType,
             ],
             query: [
                 APIKeys.grantType: APIKeys.refreshToken,

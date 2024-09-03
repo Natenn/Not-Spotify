@@ -39,7 +39,7 @@ struct Track: Identifiable, Decodable {
     let popularity: Int?
     let preview_url: String?
     let track_number: Int
-    let type: ItemType
+    let type: String
     let uri: String
 }
 
@@ -55,7 +55,7 @@ struct Album: Decodable {
     let name: String
     let release_date: String
     let release_date_precision: ReleaseDatePrecision
-    let type: ItemType
+    let type: String
     let uri: String
     let genres: [String]?
     let label: String?
@@ -80,6 +80,6 @@ struct Artist: Decodable {
     let images: [ImageObject]?
     let name: String
     let popularity: Int?
-    let type: ItemType
+    let type: String
     let uri: String
 }

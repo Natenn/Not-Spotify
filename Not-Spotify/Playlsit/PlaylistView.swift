@@ -16,7 +16,17 @@ struct PlaylistView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem()]) {
                 ForEach(viewModel.tracks) { track in
-                    ListItemView(title: track.name, subtitle: track.artists.first?.name ?? "", url: track.album?.images.first?.url)
+                    let artist = track.artists.first?.name ?? ""
+                    let imageUrl = track.album?.images.first?.url
+
+                    ListItemView(title: track.name, subtitle: artist, url: imageUrl)
+                        .onTapGesture {
+                            guard track.preview_url != nil else {
+                                return
+                            }
+
+                            PlayerViewModel.shared.play(track: track)
+                        }
                 }
 
                 if viewModel.shouldFetchMoreSongs {
@@ -26,12 +36,27 @@ struct PlaylistView: View {
                 }
             }
             .navigationTitle(viewModel.name)
+            .toolbar {
+                Button("Play") {
+                    PlayerViewModel.shared.play(
+                        tracks: viewModel.tracks,
+                        from: viewModel
+                    )
+                }
+            }
             .task {
                 viewModel.fetchSongs()
             }
+        }
+        .safeAreaInset(edge: .bottom) {
+            Spacer().frame(height: Constants.height + Constants.padding)
         }
         .refreshable {
             viewModel.refreshSongs()
         }
     }
+}
+
+#Preview {
+    PlaylistView(viewModel: PlaylistViewModel(name: "Playlist", total: 50, endpoint: ""))
 }

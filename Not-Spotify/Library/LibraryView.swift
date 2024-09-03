@@ -17,6 +17,9 @@ struct LibraryView: View {
                 playlists
             }.padding(12)
         }
+        .safeAreaInset(edge: .bottom) {
+            Spacer().frame(height: Constants.height + Constants.padding)
+        }
         .refreshable {
             viewModel.refreshPlaylists()
         }
