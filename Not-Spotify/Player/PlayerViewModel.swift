@@ -83,6 +83,10 @@ final class PlayerViewModel: ObservableObject {
     var canReplay: Bool {
         canPlay && !hasNext && player?.currentItem == nil
     }
+    
+    var canScroll: Bool {
+        (isPlaying || canPlay) && !canReplay
+    }
 
     var hasNext: Bool {
         guard player != nil else {

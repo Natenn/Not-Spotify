@@ -62,7 +62,7 @@ struct ExpandedPlayerView: View {
                 }
             )
             .padding()
-            .disabled(!viewModel.isPlaying)
+            .disabled(!viewModel.canScroll)
             buttons
         }
     }
