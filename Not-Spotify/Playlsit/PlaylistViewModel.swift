@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftNetwork
 
-class PlaylistViewModel: ObservableObject {
+final class PlaylistViewModel: ObservableObject {
     @Published var tracks: [Track] = []
 
     private var cancellables = Set<AnyCancellable>()

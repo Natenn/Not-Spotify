@@ -43,6 +43,7 @@ enum Endpoint {
     static let authToken = "api/token"
     static let savedPlaylists = "me/playlists"
     static let savedTracks = "me/tracks"
+    static let checkSavedTracks = "me/tracks/contains"
     static func playlistTracks(playlistId: String) -> String { "playlists/\(playlistId)/tracks" }
 }
 
@@ -67,6 +68,9 @@ enum APIKeys {
 
     static let limit = "limit"
     static let offset = "offset"
+    
+    // MARK: Tracks
+    static let ids = "ids"
 }
 
 // MARK: - UserScopes

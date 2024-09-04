@@ -9,10 +9,11 @@ import Foundation
 
 // MARK: - TrackInfo
 
-struct TrackInfo {
+struct TrackInfo: Identifiable {
+    let id: String
     let name: String
     let artist: String
-    let imageUrl: String?
+    let imageUrl: String
 }
 
 // MARK: - ButtonState

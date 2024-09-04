@@ -9,8 +9,6 @@ import Combine
 import Foundation
 import SwiftNetwork
 
-// MARK: - LibraryViewModel
-
 final class LibraryViewModel: ObservableObject {
     @Published var playlists: [SimplifiedPlaylistObject] = []
     @Published var tracks: [SavedTrackObject] = []
@@ -21,7 +19,7 @@ final class LibraryViewModel: ObservableObject {
     private var currentOffset = 0
 
     private var cancellables = Set<AnyCancellable>()
-    
+
     func fetchPlaylists(shouldOverwrite: Bool = false) {
         let request = Request(
             endpoint: Endpoint.savedPlaylists,
@@ -58,13 +56,13 @@ final class LibraryViewModel: ObservableObject {
                 self?.favouriteTracksCount = response.total
             }).store(in: &cancellables)
     }
-    
+
     func refreshPlaylists() {
         currentOffset = 0
         fetchFavourites()
         fetchPlaylists(shouldOverwrite: true)
     }
-    
+
     var shouldFetchMorePlaylists: Bool {
         !playlists.isEmpty && currentOffset < total
     }

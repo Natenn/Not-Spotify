@@ -10,6 +10,8 @@ import SwiftUI
 struct MiniPlayerView: View {
     @StateObject private var viewModel = PlayerViewModel.shared
 
+    @State var trackInfo: TrackInfo?
+
     var body: some View {
         let roundedRectangle = RoundedRectangle(cornerRadius: Constants.outerRadius)
 
@@ -37,9 +39,15 @@ struct MiniPlayerView: View {
                     }.disabled(!viewModel.hasNext)
                 }.padding(.trailing, Constants.padding * 2)
             }
-            ProgressView(value: viewModel.progress).progressViewStyle(.linear)
+            ProgressView(value: viewModel.currentProgress, total: viewModel.trackDuration).progressViewStyle(.linear)
         }
         .clipShape(roundedRectangle)
+        .onTapGesture {
+            self.trackInfo = viewModel.trackInfo
+        }
+        .sheet(item: $trackInfo) { _ in
+            ExpandedPlayerView()
+        }
     }
 }
 

@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import SwiftNetwork
 
-class PlayerViewModel: ObservableObject {
+final class PlayerViewModel: ObservableObject {
     static let shared = PlayerViewModel()
 
     private init() {}
@@ -30,23 +30,25 @@ class PlayerViewModel: ObservableObject {
 
     @Published private(set) var currentItem: AVPlayerItem?
     @Published private(set) var rate: Float?
-    @Published private(set) var currentProgress: Float?
+    @Published var currentProgress: Float = 0
+    @Published var isSaved: Bool = false
 
     var trackInfo: TrackInfo {
         guard !tracks.isEmpty else {
-            return TrackInfo(name: "Play Something", artist: "😅😅", imageUrl: nil)
+            return TrackInfo(id: "-1", name: "Play Something", artist: "😅😅", imageUrl: "")
         }
 
         guard index >= 0, index < tracks.count else {
-            return TrackInfo(name: "Oops", artist: "😅😅", imageUrl: nil)
+            return TrackInfo(id: "-2", name: "Oops", artist: "😅😅", imageUrl: "")
         }
 
         let track = tracks[index]
 
         return TrackInfo(
+            id: track.id,
             name: track.name,
             artist: track.artists.first?.name ?? "😅😅",
-            imageUrl: track.album?.images.first?.url
+            imageUrl: track.album?.images.first?.url ?? ""
         )
     }
 
@@ -62,6 +64,14 @@ class PlayerViewModel: ObservableObject {
         return ButtonState(systemName: "play.fill", isEnabled: false)
     }
 
+    var likeButtonInfo: ButtonState {
+        if isSaved {
+            return ButtonState(systemName: "heart.fill", isEnabled: true)
+        } else {
+            return ButtonState(systemName: "heart", isEnabled: true)
+        }
+    }
+
     var canPlay: Bool {
         !tracks.isEmpty && player != nil && (player?.rate == 0.0 || currentTime >= trackDuration || currentTime == 0)
     }
@@ -71,7 +81,11 @@ class PlayerViewModel: ObservableObject {
     }
 
     var canReplay: Bool {
-        canPlay && !hasNext
+        canPlay && !hasNext && player?.currentItem == nil
+    }
+    
+    var canScroll: Bool {
+        (isPlaying || canPlay) && !canReplay
     }
 
     var hasNext: Bool {
@@ -90,6 +104,10 @@ class PlayerViewModel: ObservableObject {
         return false
     }
 
+    var canRewind: Bool {
+        currentTime > trackDuration * 0.1 || index > 0
+    }
+
     var trackDuration: Float {
         guard let duration = player?.currentItem?.duration.seconds, duration >= .zero, !duration.isNaN else {
             return 30
@@ -100,10 +118,6 @@ class PlayerViewModel: ObservableObject {
 
     var currentTime: Float {
         Float(player?.currentItem?.currentTime().seconds ?? .zero)
-    }
-
-    var progress: Float {
-        currentTime / trackDuration
     }
 
     func play(track: Track) {
@@ -118,12 +132,13 @@ class PlayerViewModel: ObservableObject {
         addPublishers { [weak self] item in
             self?.currentItem = item
             self?.index = 0
+            self?.checkSavedTracks()
         }
 
         player?.play()
     }
 
-    private func play(tracks _: [Track]) {
+    private func play(tracks: [Track]) {
         index = -1
 
         player = AVQueuePlayer(items: tracks.compactMap {
@@ -139,6 +154,7 @@ class PlayerViewModel: ObservableObject {
             if item != nil {
                 self?.index += 1
             }
+            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -175,6 +191,7 @@ class PlayerViewModel: ObservableObject {
             if !(self?.hasNext ?? true) {
                 self?.fetchSongs()
             }
+            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -222,6 +239,44 @@ class PlayerViewModel: ObservableObject {
         group.wait()
     }
 
+    private func checkSavedTracks() {
+        guard index < tracks.count, index >= 0 else {
+            return
+        }
+
+        let request = Request(
+            endpoint: Endpoint.checkSavedTracks,
+            query: [
+                APIKeys.ids: tracks[index].id,
+            ]
+        )
+
+        Network.shared.execute(request, expecting: [Bool].self)
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
+                self?.isSaved = response.first ?? false
+            }).store(in: &cancellables)
+    }
+
+    func toggleSavedTrack() {
+        guard index < tracks.count else {
+            return
+        }
+
+        let request = Request(
+            endpoint: Endpoint.savedTracks,
+            method: isSaved ? .delete : .put,
+            body: [
+                APIKeys.ids: [tracks[index].id],
+            ]
+        )
+
+        Network.shared.execute(request, expecting: String.self)
+            .sink(receiveCompletion: { [weak self] _ in
+                self?.isSaved.toggle()
+            }, receiveValue: { _ in })
+            .store(in: &cancellables)
+    }
+
     func togglePlayback() {
         if isPlaying {
             player?.pause()
@@ -242,6 +297,39 @@ class PlayerViewModel: ObservableObject {
         }
     }
 
+    func playPrevious() {
+        guard currentTime <= trackDuration * 0.1, tracks.count > 1 else {
+            seek(to: 0.0)
+            return
+        }
+
+        guard index > 0 else {
+            return
+        }
+
+        var playerItems: [AVPlayerItem] = []
+        for i in (index - 1)..<tracks.count {
+            guard let url = URL(string: tracks[i].preview_url!) else {
+                return
+            }
+
+            playerItems.append(AVPlayerItem(url: url))
+        }
+
+        index -= 2
+
+        player?.removeAllItems()
+        for playerItem in playerItems {
+            player?.insert(playerItem, after: player?.items().last)
+        }
+
+        player?.play()
+    }
+
+    func seek(to position: Float) {
+        player?.seek(to: CMTimeMake(value: Int64(position * 1000), timescale: 1000))
+    }
+
     private func addPublishers(currentItemCompletion: @escaping (AVPlayerItem?) -> Void) {
         addPlayerPublisher(for: \.currentItem, completion: currentItemCompletion)
 
@@ -249,12 +337,45 @@ class PlayerViewModel: ObservableObject {
             self?.rate = rate
         }
 
+        addTimer()
+    }
+
+    func addTimer() {
         Timer.publish(every: 0.001, on: RunLoop.main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.currentProgress = self?.progress
+                switch self?.scrollState {
+                case .reset:
+                    self?.currentProgress = self?.currentTime ?? 0.0
+                case .scrollStarted:
+                    break
+                case let .scrollEnded(position):
+                    self?.scrollState = .reset
+                    self?.currentProgress = position
+                case .none:
+                    break
+                }
             }
             .store(in: &cancellables)
+    }
+
+    var scrollState: PlayerScrubState = .reset {
+        didSet {
+            switch scrollState {
+            case .reset:
+                return
+            case .scrollStarted:
+                return
+            case let .scrollEnded(position):
+                player?.seek(to: CMTime(seconds: TimeInterval(position), preferredTimescale: 1000))
+            }
+        }
+    }
+
+    enum PlayerScrubState {
+        case reset
+        case scrollStarted
+        case scrollEnded(Float)
     }
 
     private func addPlayerPublisher<T>(
