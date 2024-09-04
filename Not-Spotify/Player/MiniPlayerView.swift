@@ -39,7 +39,7 @@ struct MiniPlayerView: View {
                     }.disabled(!viewModel.hasNext)
                 }.padding(.trailing, Constants.padding * 2)
             }
-            ProgressView(value: viewModel.progress).progressViewStyle(.linear)
+            ProgressView(value: viewModel.currentProgress, total: viewModel.trackDuration).progressViewStyle(.linear)
         }
         .clipShape(roundedRectangle)
         .onTapGesture {

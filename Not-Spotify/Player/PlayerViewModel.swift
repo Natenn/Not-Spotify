@@ -30,7 +30,7 @@ final class PlayerViewModel: ObservableObject {
 
     @Published private(set) var currentItem: AVPlayerItem?
     @Published private(set) var rate: Float?
-    @Published var currentProgress: Float = 0.0
+    @Published var currentProgress: Float = 0
     @Published var isSaved: Bool = false
 
     var trackInfo: TrackInfo {
@@ -112,10 +112,6 @@ final class PlayerViewModel: ObservableObject {
         Float(player?.currentItem?.currentTime().seconds ?? .zero)
     }
 
-    var progress: Float {
-        currentTime / trackDuration
-    }
-
     func play(track: Track) {
         tracks = [track]
 
@@ -134,7 +130,7 @@ final class PlayerViewModel: ObservableObject {
         player?.play()
     }
 
-    private func play(tracks _: [Track]) {
+    private func play(tracks: [Track]) {
         index = -1
 
         player = AVQueuePlayer(items: tracks.compactMap {
@@ -292,6 +288,10 @@ final class PlayerViewModel: ObservableObject {
         }
     }
 
+    func seek(to position: Float) {
+        player?.seek(to: CMTimeMake(value: Int64(position * 1000), timescale: 1000))
+    }
+
     private func addPublishers(currentItemCompletion: @escaping (AVPlayerItem?) -> Void) {
         addPlayerPublisher(for: \.currentItem, completion: currentItemCompletion)
 
@@ -299,12 +299,45 @@ final class PlayerViewModel: ObservableObject {
             self?.rate = rate
         }
 
+        addTimer()
+    }
+
+    func addTimer() {
         Timer.publish(every: 0.001, on: RunLoop.main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.currentProgress = self?.progress ?? 0.0
+                switch self?.scrollState {
+                case .reset:
+                    self?.currentProgress = self?.currentTime ?? 0.0
+                case .scrollStarted:
+                    break
+                case let .scrollEnded(position):
+                    self?.scrollState = .reset
+                    self?.currentProgress = position
+                case .none:
+                    break
+                }
             }
             .store(in: &cancellables)
+    }
+
+    var scrollState: PlayerScrubState = .reset {
+        didSet {
+            switch scrollState {
+            case .reset:
+                return
+            case .scrollStarted:
+                return
+            case let .scrollEnded(position):
+                player?.seek(to: CMTime(seconds: TimeInterval(position), preferredTimescale: 1000))
+            }
+        }
+    }
+
+    enum PlayerScrubState {
+        case reset
+        case scrollStarted
+        case scrollEnded(Float)
     }
 
     private func addPlayerPublisher<T>(

@@ -12,9 +12,6 @@ struct ExpandedPlayerView: View {
 
     @Environment(\.verticalSizeClass) var verticalSizeClass
 
-    @State var progress = 0.5
-    @State var isScrolling = false
-
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -53,8 +50,19 @@ struct ExpandedPlayerView: View {
                 .font(.system(size: 20).weight(.semibold))
             Text(viewModel.trackInfo.artist)
                 .foregroundStyle(.secondary)
-            Slider(value: $viewModel.currentProgress)
-                .padding()
+            Slider(
+                value: self.$viewModel.currentProgress,
+                in: 0...viewModel.trackDuration,
+                onEditingChanged: { editing in
+                    if editing {
+                        viewModel.scrollState = .scrollStarted
+                    } else {
+                        viewModel.scrollState = .scrollEnded(viewModel.currentProgress)
+                    }
+                }
+            )
+            .padding()
+            .disabled(!viewModel.isPlaying)
             buttons
         }
     }
