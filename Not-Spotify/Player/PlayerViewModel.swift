@@ -31,6 +31,7 @@ final class PlayerViewModel: ObservableObject {
     @Published private(set) var currentItem: AVPlayerItem?
     @Published private(set) var rate: Float?
     @Published var currentProgress: Float = 0.0
+    @Published var isSaved: Bool = false
 
     var trackInfo: TrackInfo {
         guard !tracks.isEmpty else {
@@ -61,6 +62,14 @@ final class PlayerViewModel: ObservableObject {
         }
 
         return ButtonState(systemName: "play.fill", isEnabled: false)
+    }
+
+    var likeButtonInfo: ButtonState {
+        if isSaved {
+            return ButtonState(systemName: "heart.fill", isEnabled: true)
+        } else {
+            return ButtonState(systemName: "heart", isEnabled: true)
+        }
     }
 
     var canPlay: Bool {
@@ -119,6 +128,7 @@ final class PlayerViewModel: ObservableObject {
         addPublishers { [weak self] item in
             self?.currentItem = item
             self?.index = 0
+            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -140,6 +150,7 @@ final class PlayerViewModel: ObservableObject {
             if item != nil {
                 self?.index += 1
             }
+            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -221,6 +232,44 @@ final class PlayerViewModel: ObservableObject {
         })
 
         group.wait()
+    }
+
+    private func checkSavedTracks() {
+        guard index < tracks.count else {
+            return
+        }
+
+        let request = Request(
+            endpoint: Endpoint.checkSavedTracks,
+            query: [
+                APIKeys.ids: tracks[index].id,
+            ]
+        )
+
+        Network.shared.execute(request, expecting: [Bool].self)
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
+                self?.isSaved = response.first ?? false
+            }).store(in: &cancellables)
+    }
+
+    func toggleSavedTrack() {
+        guard index < tracks.count else {
+            return
+        }
+
+        let request = Request(
+            endpoint: Endpoint.savedTracks,
+            method: isSaved ? .delete : .put,
+            body: [
+                APIKeys.ids: [tracks[index].id],
+            ]
+        )
+
+        Network.shared.execute(request, expecting: String.self)
+            .sink(receiveCompletion: { [weak self] _ in
+                self?.isSaved.toggle()
+            }, receiveValue: { _ in })
+            .store(in: &cancellables)
     }
 
     func togglePlayback() {

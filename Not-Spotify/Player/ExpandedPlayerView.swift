@@ -62,8 +62,8 @@ struct ExpandedPlayerView: View {
     private var buttons: some View {
         HStack {
             Group {
-                Button(action: {}) {
-                    Image(systemName: "heart")
+                Button(action: viewModel.toggleSavedTrack) {
+                    Image(systemName: viewModel.likeButtonInfo.systemName)
                         .font(.system(size: Constants.magicNumber * 1.2))
                 }
                 Button(action: {}) {
