@@ -100,6 +100,10 @@ final class PlayerViewModel: ObservableObject {
         return false
     }
 
+    var canRewind: Bool {
+        currentTime > trackDuration * 0.1 || index > 0
+    }
+
     var trackDuration: Float {
         guard let duration = player?.currentItem?.duration.seconds, duration >= .zero, !duration.isNaN else {
             return 30
@@ -183,6 +187,7 @@ final class PlayerViewModel: ObservableObject {
             if !(self?.hasNext ?? true) {
                 self?.fetchSongs()
             }
+            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -231,7 +236,7 @@ final class PlayerViewModel: ObservableObject {
     }
 
     private func checkSavedTracks() {
-        guard index < tracks.count else {
+        guard index < tracks.count, index >= 0 else {
             return
         }
 
@@ -286,6 +291,35 @@ final class PlayerViewModel: ObservableObject {
         if hasNext {
             player?.advanceToNextItem()
         }
+    }
+
+    func playPrevious() {
+        guard currentTime <= trackDuration * 0.1, tracks.count > 1 else {
+            seek(to: 0.0)
+            return
+        }
+
+        guard index > 0 else {
+            return
+        }
+
+        var playerItems: [AVPlayerItem] = []
+        for i in (index - 1)..<tracks.count {
+            guard let url = URL(string: tracks[i].preview_url!) else {
+                return
+            }
+
+            playerItems.append(AVPlayerItem(url: url))
+        }
+
+        index -= 2
+
+        player?.removeAllItems()
+        for playerItem in playerItems {
+            player?.insert(playerItem, after: player?.items().last)
+        }
+
+        player?.play()
     }
 
     func seek(to position: Float) {

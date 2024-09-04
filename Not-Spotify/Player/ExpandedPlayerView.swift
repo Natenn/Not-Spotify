@@ -74,9 +74,9 @@ struct ExpandedPlayerView: View {
                     Image(systemName: viewModel.likeButtonInfo.systemName)
                         .font(.system(size: Constants.magicNumber * 1.2))
                 }
-                Button(action: {}) {
+                Button(action: viewModel.playPrevious) {
                     Image(systemName: "backward.fill")
-                }
+                }.disabled(!viewModel.canRewind)
                 Button(action: viewModel.togglePlayback) {
                     Image(systemName: viewModel.playButtonInfo.systemName)
                         .font(.system(size: Constants.magicNumber * 1.5))
