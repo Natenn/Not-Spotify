@@ -11,63 +11,52 @@ struct LibraryView: View {
     @StateObject private var viewModel = LibraryViewModel()
 
     var body: some View {
-        ScrollView {
-            Group {
-                favourites
-                playlists
-            }.padding(Constants.largerPadding)
-        }
-        .safeAreaInset(edge: .bottom) {
-            Spacer().frame(height: Constants.height + Constants.padding)
-        }
-        .refreshable {
-            viewModel.refreshPlaylists()
-        }
-        .task {
-            if viewModel.playlists.isEmpty {
-                viewModel.fetchPlaylists()
+        NavigationStack {
+            ScrollView {
+                Group {
+                    favourites
+                    playlists
+                }.padding(Constants.largerPadding)
             }
-            if viewModel.tracks.isEmpty {
-                viewModel.fetchFavourites()
+            .safeAreaInset(edge: .bottom) {
+                Spacer().frame(height: Constants.height + Constants.padding)
             }
+            .refreshable {
+                viewModel.refreshPlaylists()
+            }
+            .task {
+                if viewModel.playlists.isEmpty {
+                    viewModel.fetchPlaylists()
+                }
+                if viewModel.tracks.isEmpty {
+                    viewModel.fetchFavourites()
+                }
+            }
+            .navigationTitle("Library")
         }
     }
 
     private var favourites: some View {
-        let favourites = "Favourites"
-        
-        return NavigationLink(destination:
-            PlaylistView(
-                viewModel: PlaylistViewModel(
-                    name: favourites,
-                    total: viewModel.favouriteTracksCount,
-                    endpoint: Endpoint.savedTracks
-                )
-            )
-        ) {
-            ListItemView(
-                title: favourites,
-                subtitle: "\(viewModel.favouriteTracksCount) favourite songs",
-                systemName: "heart.fill"
-            )
-        }.buttonStyle(PlainButtonStyle())
+        PlaylistNavigationItemView(
+            name: "Favourites",
+            subtitle: "\(viewModel.favouriteTracksCount) favourite songs",
+            total: viewModel.favouriteTracksCount,
+            endpoint: Endpoint.savedTracks,
+            systemName: "heart.fill"
+        )
     }
 
     private var playlists: some View {
         Group {
             LazyVGrid(columns: [GridItem()]) {
                 ForEach(viewModel.playlists) { playlist in
-                    NavigationLink(destination:
-                        PlaylistView(
-                            viewModel: PlaylistViewModel(
-                                name: playlist.name,
-                                total: playlist.tracks.total ?? 0,
-                                endpoint: Endpoint.playlistTracks(playlistId: playlist.id)
-                            )
-                        )
-                    ) {
-                        ListItemView(title: playlist.name, subtitle: playlist.subtitle, url: playlist.imageUrl)
-                    }.buttonStyle(PlainButtonStyle())
+                    PlaylistNavigationItemView(
+                        name: playlist.name,
+                        subtitle: playlist.subtitle,
+                        total: playlist.total,
+                        endpoint: Endpoint.playlistTracks(playlistId: playlist.id),
+                        imageUrl: playlist.imageUrl
+                    )
                 }
             }
 

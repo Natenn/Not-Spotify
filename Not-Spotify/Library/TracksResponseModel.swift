@@ -19,6 +19,18 @@ struct TracksResponse: Decodable {
     let items: [SavedTrackObject]
 }
 
+// MARK: - TracksSearchResponse
+
+struct TracksSearchResponse: Decodable {
+    let href: String
+    let limit: Int
+    let next: String?
+    let offset: Int
+    let previous: String?
+    let total: Int
+    let items: [Track]
+}
+
 // MARK: - SavedTrackObject
 
 struct SavedTrackObject: Decodable {
@@ -82,4 +94,14 @@ struct Artist: Decodable {
     let popularity: Int?
     let type: String
     let uri: String
+}
+
+extension Track {
+    var artist: String {
+        artists.first?.name ?? ""
+    }
+
+    var imageUrl: String? {
+        album?.images.first?.url
+    }
 }

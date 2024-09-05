@@ -43,11 +43,11 @@ final class PlaylistViewModel: ObservableObject {
         Network.shared.execute(request, expecting: TracksResponse.self)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
                 let tracks = response.items.map { $0.track }
+
                 if shouldOverwrite {
-                    self?.tracks = tracks
-                } else {
-                    self?.tracks.append(contentsOf: tracks)
+                    self?.tracks = []
                 }
+                self?.tracks.append(contentsOf: tracks)
                 self?.currentOffset += response.items.count
             }).store(in: &cancellables)
     }

@@ -27,6 +27,7 @@ enum APICredentials {
 enum APIConstants {
     static let redirectUri = "https://github.com/Natenn"
     static let contentType = "application/x-www-form-urlencoded"
+    static let searchedTypes = "track,playlist"
 }
 
 // MARK: - BaseUrl
@@ -45,6 +46,7 @@ enum Endpoint {
     static let savedTracks = "me/tracks"
     static let checkSavedTracks = "me/tracks/contains"
     static func playlistTracks(playlistId: String) -> String { "playlists/\(playlistId)/tracks" }
+    static let search = "search"
 }
 
 // MARK: - APIKeys
@@ -68,9 +70,13 @@ enum APIKeys {
 
     static let limit = "limit"
     static let offset = "offset"
+    static let type = "type"
     
     // MARK: Tracks
     static let ids = "ids"
+    
+    // MARK: Search
+    static let query = "q"
 }
 
 // MARK: - UserScopes
