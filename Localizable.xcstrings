@@ -30,6 +30,16 @@
           }
         }
       }
+    },
+    "Search Songs and Playlists" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "მოძებნე სიმღერები და კოლექციები"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

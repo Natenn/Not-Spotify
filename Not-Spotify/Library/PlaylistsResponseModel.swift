@@ -57,4 +57,8 @@ extension SimplifiedPlaylistObject {
     var imageUrl: String? {
         images.first?.url
     }
+    
+    var total: Int {
+        tracks.total ?? 0
+    }
 }

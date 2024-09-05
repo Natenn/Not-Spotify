@@ -16,10 +16,7 @@ struct PlaylistView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem()]) {
                 ForEach(viewModel.tracks) { track in
-                    let artist = track.artists.first?.name ?? ""
-                    let imageUrl = track.album?.images.first?.url
-
-                    ListItemView(title: track.name, subtitle: artist, url: imageUrl)
+                    ListItemView(title: track.name, subtitle: track.artist, url: track.imageUrl)
                         .onTapGesture {
                             guard track.preview_url != nil else {
                                 return

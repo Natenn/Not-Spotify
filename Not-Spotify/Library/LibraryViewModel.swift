@@ -32,10 +32,9 @@ final class LibraryViewModel: ObservableObject {
         Network.shared.execute(request, expecting: PlaylistsResponse.self)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
                 if shouldOverwrite {
-                    self?.playlists = response.items
-                } else {
-                    self?.playlists.append(contentsOf: response.items)
+                    self?.playlists = []
                 }
+                self?.playlists.append(contentsOf: response.items)
                 self?.currentOffset += response.items.count
                 self?.total = response.total
             }).store(in: &cancellables)

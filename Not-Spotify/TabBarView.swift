@@ -13,14 +13,10 @@ struct TabBarView: View {
     var body: some View {
         TabView {
             Tab("Library", systemImage: "books.vertical") {
-                NavigationStack {
-                    LibraryView().navigationTitle("Library")
-                }
+                LibraryView()
             }
             Tab("Search", systemImage: "magnifyingglass") {
-                NavigationStack {
-                    LibraryView().navigationTitle("Search")
-                }
+                SearchView()
             }
         }
         .safeAreaInset(edge: .bottom) {
