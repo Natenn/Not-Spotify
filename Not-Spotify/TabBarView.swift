@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// MARK: - TabBarView
-
 struct TabBarView: View {
     var body: some View {
         TabView {
@@ -19,15 +17,6 @@ struct TabBarView: View {
                 SearchView()
             }
         }
-        .safeAreaInset(edge: .bottom) {
-            MiniPlayerView()
-                .padding([.top, .bottom], Constants.padding)
-                .offset(y: -tabBatHeight)
-        }
-    }
-
-    private var tabBatHeight: CGFloat {
-        UITabBarController().tabBar.frame.size.height
     }
 }
 
