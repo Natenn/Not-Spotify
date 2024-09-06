@@ -19,8 +19,7 @@ struct LibraryView: View {
                 }.padding(Constants.largerPadding)
             }
             .safeAreaInset(edge: .bottom) {
-                MiniPlayerView()
-                    .padding([.top, .bottom], Constants.padding)
+                Spacer().frame(height: Constants.height + Constants.padding)
             }
             .refreshable {
                 viewModel.refreshPlaylists()

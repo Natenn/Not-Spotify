@@ -45,8 +45,7 @@ struct SearchView: View {
                 .padding(Constants.largerPadding)
             }
             .safeAreaInset(edge: .bottom) {
-                MiniPlayerView()
-                    .padding([.top, .bottom], Constants.padding)
+                Spacer().frame(height: Constants.height + Constants.padding)
             }
             .searchable(text: $viewModel.query, prompt: "Search Songs and Playlists")
             .onSubmit(of: .search) {
