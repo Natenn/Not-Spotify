@@ -5,7 +5,6 @@
 //  Created by Naten on 25.08.24.
 //
 
-import Combine
 import Foundation
 import SwiftNetwork
 
@@ -14,12 +13,22 @@ final class Network {
 
     private init() {}
 
-    func execute<T: Decodable>(_ request: Request, expecting type: T.Type) -> Future<T, Error> {
-        if AuthManager.shared.shouldRefreshToken, !AuthManager.shared.isRefreshingToken {
+    func execute<T: Decodable>(
+        _ request: Request,
+        expecting type: T.Type,
+        success: @escaping @Sendable (T) -> Void = { _ in },
+        failure: @escaping @Sendable (_ error: Error) -> Void = { _ in }
+    ) async throws {
+        if AuthManager.shared.shouldRefreshToken {
             AuthManager.shared.updateToken()
         }
 
-        return SwiftNetwork.shared.execute(request, expecting: type)
+        try await SwiftNetwork.shared.execute(
+            request,
+            expecting: type,
+            success: success,
+            failure: failure
+        )
     }
 
     func configureDefaultRequest() {

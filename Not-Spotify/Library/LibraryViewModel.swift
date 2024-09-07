@@ -5,7 +5,6 @@
 //  Created by Naten on 25.08.24.
 //
 
-import Combine
 import Foundation
 import SwiftNetwork
 
@@ -18,8 +17,6 @@ final class LibraryViewModel: ObservableObject {
     private let offset = 20
     private var currentOffset = 0
 
-    private var cancellables = Set<AnyCancellable>()
-
     func fetchPlaylists(shouldOverwrite: Bool = false) {
         let request = Request(
             endpoint: Endpoint.savedPlaylists,
@@ -28,16 +25,19 @@ final class LibraryViewModel: ObservableObject {
                 APIKeys.offset: currentOffset,
             ]
         )
-
-        Network.shared.execute(request, expecting: PlaylistsResponse.self)
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
-                if shouldOverwrite {
-                    self?.playlists = []
+        
+        Task {
+            try await Network.shared.execute(request, expecting: PlaylistsResponse.self, success: { response in
+                DispatchQueue.main.async { [weak self] in
+                    if shouldOverwrite {
+                        self?.playlists = []
+                    }
+                    self?.playlists.append(contentsOf: response.items)
+                    self?.currentOffset += response.items.count
+                    self?.total = response.total
                 }
-                self?.playlists.append(contentsOf: response.items)
-                self?.currentOffset += response.items.count
-                self?.total = response.total
-            }).store(in: &cancellables)
+            })
+        }
     }
 
     func fetchFavourites() {
@@ -49,11 +49,14 @@ final class LibraryViewModel: ObservableObject {
             ]
         )
 
-        Network.shared.execute(request, expecting: TracksResponse.self)
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
-                self?.tracks = response.items
-                self?.favouriteTracksCount = response.total
-            }).store(in: &cancellables)
+        Task {
+            try await Network.shared.execute(request, expecting: TracksResponse.self, success: { response in
+                DispatchQueue.main.async { [weak self] in
+                    self?.tracks = response.items
+                    self?.favouriteTracksCount = response.total
+                }
+            })
+        }
     }
 
     func refreshPlaylists() {
@@ -64,9 +67,5 @@ final class LibraryViewModel: ObservableObject {
 
     var shouldFetchMorePlaylists: Bool {
         !playlists.isEmpty && currentOffset < total
-    }
-
-    deinit {
-        cancellables.forEach { $0.cancel() }
     }
 }
