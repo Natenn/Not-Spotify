@@ -580,7 +580,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Natenn/SwiftNetwork";
 			requirement = {
-				branch = refactor/request;
+				branch = main;
 				kind = branch;
 			};
 		};

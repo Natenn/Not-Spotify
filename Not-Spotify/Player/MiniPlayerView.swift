@@ -43,6 +43,9 @@ struct MiniPlayerView: View {
         }
         .clipShape(roundedRectangle)
         .onTapGesture {
+            guard viewModel.hasTracks else {
+                return
+            }
             self.trackInfo = viewModel.trackInfo
         }
         .sheet(item: $trackInfo) { _ in
