@@ -5,14 +5,11 @@
 //  Created by Naten on 26.08.24.
 //
 
-import Combine
 import Foundation
 import SwiftNetwork
 
 final class PlaylistViewModel: ObservableObject {
     @Published var tracks: [Track] = []
-
-    private var cancellables = Set<AnyCancellable>()
 
     var total: Int
     var endpoint: String
@@ -40,16 +37,19 @@ final class PlaylistViewModel: ObservableObject {
             ]
         )
 
-        Network.shared.execute(request, expecting: TracksResponse.self)
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
-                let tracks = response.items.map { $0.track }
+        Task {
+            try await Network.shared.execute(request, expecting: TracksResponse.self, success: { response in
+                DispatchQueue.main.async { [weak self] in
+                    let tracks = response.items.map { $0.track }
 
-                if shouldOverwrite {
-                    self?.tracks = []
+                    if shouldOverwrite {
+                        self?.tracks = []
+                    }
+                    self?.tracks.append(contentsOf: tracks)
+                    self?.currentOffset += response.items.count
                 }
-                self?.tracks.append(contentsOf: tracks)
-                self?.currentOffset += response.items.count
-            }).store(in: &cancellables)
+            })
+        }
     }
 
     func refreshSongs() {
@@ -59,9 +59,5 @@ final class PlaylistViewModel: ObservableObject {
 
     var shouldFetchMoreSongs: Bool {
         !tracks.isEmpty && currentOffset < total
-    }
-
-    deinit {
-        cancellables.forEach { $0.cancel() }
     }
 }

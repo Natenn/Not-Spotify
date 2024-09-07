@@ -5,7 +5,6 @@
 //  Created by Naten on 24.08.24.
 //
 
-import Combine
 import Foundation
 import SwiftNetwork
 
@@ -14,13 +13,9 @@ final class AuthManager: ObservableObject {
 
     private init() {}
 
-    private var cancellables = Set<AnyCancellable>()
-
     public var isAuthorised: Bool {
         UserDefaults.standard.string(forKey: UserDefaultsKeys.accessToken) != nil
     }
-
-    var isRefreshingToken = false
 
     public var shouldRefreshToken: Bool {
         guard let expirationDate else {
@@ -65,7 +60,6 @@ final class AuthManager: ObservableObject {
         let group = DispatchGroup()
 
         group.enter()
-        isRefreshingToken = true
 
         let request = Request(
             baseUrl: BaseUrl.authBaseUrl,
@@ -82,19 +76,15 @@ final class AuthManager: ObservableObject {
             ]
         )
 
-        SwiftNetwork.shared.execute(request, expecting: AuthResponse.self, success: { [weak self] response in
-            self?.isRefreshingToken = false
+        Task {
+            try await SwiftNetwork.shared.execute(request, expecting: AuthResponse.self, success: { [weak self] response in
+                self?.cacheUserDefaults(response)
+                Network.shared.configureDefaultRequest()
 
-            self?.cacheUserDefaults(response)
-            Network.shared.configureDefaultRequest()
-
-            group.leave()
-        })
+                group.leave()
+            })
+        }
 
         group.wait()
-    }
-
-    deinit {
-        cancellables.forEach { $0.cancel() }
     }
 }

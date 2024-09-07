@@ -83,7 +83,7 @@ final class PlayerViewModel: ObservableObject {
     var canReplay: Bool {
         canPlay && !hasNext && player?.currentItem == nil
     }
-    
+
     var canScroll: Bool {
         (isPlaying || canPlay) && !canReplay
     }
@@ -213,28 +213,30 @@ final class PlayerViewModel: ObservableObject {
         )
 
         group.enter()
-        SwiftNetwork.shared.execute(request, expecting: TracksResponse.self, success: { [weak self] response in
-            let tracks: [Track] = response.items.compactMap {
-                guard $0.track.preview_url != nil else {
-                    return nil
+        Task {
+            try await SwiftNetwork.shared.execute(request, expecting: TracksResponse.self, success: { [weak self] response in
+                let tracks: [Track] = response.items.compactMap {
+                    guard $0.track.preview_url != nil else {
+                        return nil
+                    }
+
+                    return $0.track
                 }
 
-                return $0.track
-            }
+                self?.currentOffset += response.items.count
+                self?.tracks.append(contentsOf: tracks)
 
-            self?.currentOffset += response.items.count
-            self?.tracks.append(contentsOf: tracks)
+                for track in tracks {
+                    guard let url = URL(string: track.preview_url!) else {
+                        continue
+                    }
 
-            for track in tracks {
-                guard let url = URL(string: track.preview_url!) else {
-                    continue
+                    self?.player?.insert(AVPlayerItem(url: url), after: self?.player?.items().last)
                 }
 
-                self?.player?.insert(AVPlayerItem(url: url), after: self?.player?.items().last)
-            }
-
-            group.leave()
-        })
+                group.leave()
+            })
+        }
 
         group.wait()
     }
@@ -251,10 +253,13 @@ final class PlayerViewModel: ObservableObject {
             ]
         )
 
-        Network.shared.execute(request, expecting: [Bool].self)
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
-                self?.isSaved = response.first ?? false
-            }).store(in: &cancellables)
+        Task {
+            try await Network.shared.execute(request, expecting: [Bool].self, success: { [weak self] response in
+                DispatchQueue.main.async { [weak self] in
+                    self?.isSaved = response.first ?? false
+                }
+            })
+        }
     }
 
     func toggleSavedTrack() {
@@ -270,11 +275,12 @@ final class PlayerViewModel: ObservableObject {
             ]
         )
 
-        Network.shared.execute(request, expecting: String.self)
-            .sink(receiveCompletion: { [weak self] _ in
+        Task {
+            try await Network.shared.execute(request, expecting: EmptyResponse.self)
+            DispatchQueue.main.async { [weak self] in
                 self?.isSaved.toggle()
-            }, receiveValue: { _ in })
-            .store(in: &cancellables)
+            }
+        }
     }
 
     func togglePlayback() {

@@ -5,14 +5,11 @@
 //  Created by Naten on 21.08.24.
 //
 
-import Combine
 import Foundation
 import SwiftNetwork
 
 final class AuthViewModel: ObservableObject {
     @Published var authDidSucceed: Bool = false
-
-    private var cancellables = Set<AnyCancellable>()
 
     func getAuthorizationURL() -> URLRequest? {
         Request(
@@ -58,24 +55,14 @@ final class AuthViewModel: ObservableObject {
             ]
         )
 
-        SwiftNetwork.shared.execute(request, expecting: AuthResponse.self)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    switch completion {
-                    case .finished:
-                        self?.authDidSucceed = true
-                    case .failure:
-                        break
-                    }
-                },
-                receiveValue: { response in
+        Task {
+            try await SwiftNetwork.shared.execute(request, expecting: AuthResponse.self, success: { [weak self] response in
+                DispatchQueue.main.async { [weak self] in
+                    self?.authDidSucceed = true
                     AuthManager.shared.cacheUserDefaults(response)
                     Network.shared.configureDefaultRequest()
                 }
-            ).store(in: &cancellables)
-    }
-
-    deinit {
-        cancellables.forEach { $0.cancel() }
+            })
+        }
     }
 }
