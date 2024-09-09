@@ -13,7 +13,14 @@ import SwiftNetwork
 final class PlayerViewModel: ObservableObject {
     static let shared = PlayerViewModel()
 
-    private init() {}
+    private init() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playback, mode: .default, options: [])
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 
     private var endpoint = ""
     private var currentOffset = 0
