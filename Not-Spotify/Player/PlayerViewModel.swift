@@ -15,7 +15,6 @@ final class PlayerViewModel: ObservableObject {
     static let shared = PlayerViewModel()
 
     private let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
-    private var nowPlayingInfo = [String: Any]()
 
     private init() {
         registerTargetForRemoteCommands()
@@ -434,7 +433,9 @@ extension PlayerViewModel {
         guard index >= 0, index < tracks.count else {
             return
         }
+
         let track = tracks[index]
+        var nowPlayingInfo = [String: Any]()
 
         nowPlayingInfo[MPMediaItemPropertyTitle] = track.name
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
@@ -484,8 +485,6 @@ extension PlayerViewModel {
         MPRemoteCommandCenter.shared().previousTrackCommand.addTarget(handler: playPreviousTrack)
         MPRemoteCommandCenter.shared().nextTrackCommand.addTarget(handler: playNextTrack)
         MPRemoteCommandCenter.shared().changePlaybackPositionCommand.addTarget(handler: didChangePlaybackPosition)
-
-        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
     }
 
     private func togglePlayPause(event _: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
