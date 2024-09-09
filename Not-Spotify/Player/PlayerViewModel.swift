@@ -5,15 +5,21 @@
 //  Created by Naten on 01.09.24.
 //
 
-import AVFoundation
 import Combine
-import Foundation
+import MediaPlayer
 import SwiftNetwork
+
+// MARK: - PlayerViewModel
 
 final class PlayerViewModel: ObservableObject {
     static let shared = PlayerViewModel()
 
+    private let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+    private var nowPlayingInfo = [String: Any]()
+
     private init() {
+        registerTargetForRemoteCommands()
+
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(.playback, mode: .default, options: [])
@@ -94,7 +100,7 @@ final class PlayerViewModel: ObservableObject {
     var canScroll: Bool {
         (isPlaying || canPlay) && !canReplay
     }
-    
+
     var hasTracks: Bool {
         !tracks.isEmpty
     }
@@ -140,10 +146,8 @@ final class PlayerViewModel: ObservableObject {
 
         player = AVQueuePlayer(items: [AVPlayerItem(url: url)])
 
-        addPublishers { [weak self] item in
-            self?.currentItem = item
+        addPublishers { [weak self] _ in
             self?.index = 0
-            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -161,11 +165,9 @@ final class PlayerViewModel: ObservableObject {
         })
 
         addPublishers { [weak self] item in
-            self?.currentItem = item
             if item != nil {
                 self?.index += 1
             }
-            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -195,14 +197,12 @@ final class PlayerViewModel: ObservableObject {
         })
 
         addPublishers { [weak self] item in
-            self?.currentItem = item
             if item != nil {
                 self?.index += 1
             }
             if !(self?.hasNext ?? true) {
                 self?.fetchSongs()
             }
-            self?.checkSavedTracks()
         }
 
         player?.play()
@@ -347,8 +347,41 @@ final class PlayerViewModel: ObservableObject {
         player?.seek(to: CMTimeMake(value: Int64(position * 1000), timescale: 1000))
     }
 
+    var scrollState: PlayerScrubState = .reset {
+        didSet {
+            switch scrollState {
+            case .reset:
+                return
+            case .scrollStarted:
+                return
+            case let .scrollEnded(position):
+                player?.seek(to: CMTime(seconds: TimeInterval(position), preferredTimescale: 1000))
+            }
+        }
+    }
+
+    enum PlayerScrubState {
+        case reset
+        case scrollStarted
+        case scrollEnded(Float)
+    }
+
+    deinit {
+        cancelSubscriptions()
+    }
+}
+
+// MARK: - Cancellables
+
+extension PlayerViewModel {
     private func addPublishers(currentItemCompletion: @escaping (AVPlayerItem?) -> Void) {
-        addPlayerPublisher(for: \.currentItem, completion: currentItemCompletion)
+        cancelSubscriptions()
+        addPlayerPublisher(for: \.currentItem, completion: { [weak self] item in
+            self?.currentItem = item
+            currentItemCompletion(item)
+            self?.checkSavedTracks()
+            self?.updateNowPlayingInfo()
+        })
 
         addPlayerPublisher(for: \.rate) { [weak self] rate in
             self?.rate = rate
@@ -376,25 +409,6 @@ final class PlayerViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    var scrollState: PlayerScrubState = .reset {
-        didSet {
-            switch scrollState {
-            case .reset:
-                return
-            case .scrollStarted:
-                return
-            case let .scrollEnded(position):
-                player?.seek(to: CMTime(seconds: TimeInterval(position), preferredTimescale: 1000))
-            }
-        }
-    }
-
-    enum PlayerScrubState {
-        case reset
-        case scrollStarted
-        case scrollEnded(Float)
-    }
-
     private func addPlayerPublisher<T>(
         for keyPath: KeyPath<AVQueuePlayer, T>,
         completion: @escaping (T) -> Void
@@ -407,7 +421,94 @@ final class PlayerViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    deinit {
+    private func cancelSubscriptions() {
         cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+}
+
+// MARK: - Now Playing info
+
+extension PlayerViewModel {
+    private func updateNowPlayingInfo() {
+        guard index >= 0, index < tracks.count else {
+            return
+        }
+        let track = tracks[index]
+
+        nowPlayingInfo[MPMediaItemPropertyTitle] = track.name
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = trackDuration
+        nowPlayingInfo[MPMediaItemPropertyArtist] = track.artists.first?.name
+        MPRemoteCommandCenter.shared().nextTrackCommand.isEnabled = hasNext
+
+        if let image = getCoverImage(from: track.imageUrl ?? "") {
+            let artwork = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { _ in
+                image
+            })
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        } else {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = nil
+        }
+
+        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+    }
+
+    private func getCoverImage(from url: String) -> UIImage? {
+        var image: UIImage?
+        let group = DispatchGroup()
+
+        if let imageUrl = URL(string: url) {
+            group.enter()
+
+            Task {
+                let imageData = try? Data(contentsOf: imageUrl)
+
+                if let imageData = imageData {
+                    image = UIImage(data: imageData)
+                }
+                group.leave()
+            }
+        }
+        group.wait()
+
+        return image
+    }
+}
+
+// MARK: - Now Playing actions
+
+extension PlayerViewModel {
+    private func registerTargetForRemoteCommands() {
+        MPRemoteCommandCenter.shared().togglePlayPauseCommand.addTarget(handler: togglePlayPause)
+        MPRemoteCommandCenter.shared().previousTrackCommand.addTarget(handler: playPreviousTrack)
+        MPRemoteCommandCenter.shared().nextTrackCommand.addTarget(handler: playNextTrack)
+        MPRemoteCommandCenter.shared().changePlaybackPositionCommand.addTarget(handler: didChangePlaybackPosition)
+
+        nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+    }
+
+    private func togglePlayPause(event _: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        togglePlayback()
+        updateNowPlayingInfo()
+        return .success
+    }
+
+    func playNextTrack(event _: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        playNext()
+        return .success
+    }
+
+    func playPreviousTrack(event _: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        playPrevious()
+        return .success
+    }
+
+    func didChangePlaybackPosition(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        guard let event = event as? MPChangePlaybackPositionCommandEvent else {
+            return .commandFailed
+        }
+        seek(to: Float(event.positionTime))
+        return .success
     }
 }
