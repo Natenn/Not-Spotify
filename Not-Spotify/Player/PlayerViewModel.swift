@@ -339,6 +339,15 @@ final class PlayerViewModel: ObservableObject {
             player?.insert(playerItem, after: player?.items().last)
         }
 
+        addPublishers { [weak self] item in
+            if item != nil {
+                self?.index += 1
+            }
+            if !(self?.hasNext ?? true) {
+                self?.fetchSongs()
+            }
+        }
+
         player?.play()
     }
 
