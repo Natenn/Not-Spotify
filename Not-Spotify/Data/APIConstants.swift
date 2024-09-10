@@ -22,7 +22,7 @@ enum APICredentials {
     static let clientSecret = "8fab170a7dee4b48a229b1407082bb6d"
 }
 
-// MARK: - Constants
+// MARK: - APIConstants
 
 enum APIConstants {
     static let redirectUri = "https://github.com/Natenn"
@@ -47,6 +47,7 @@ enum Endpoint {
     static let checkSavedTracks = "me/tracks/contains"
     static func playlistTracks(playlistId: String) -> String { "playlists/\(playlistId)/tracks" }
     static func playlistFollowers(playlistId: String) -> String { "playlists/\(playlistId)/followers" }
+    static func playlistFollowersContains(playlistId: String) -> String { "playlists/\(playlistId)/followers/contains" }
     static let search = "search"
 }
 
@@ -72,11 +73,17 @@ enum APIKeys {
     static let limit = "limit"
     static let offset = "offset"
     static let type = "type"
-    
+
     // MARK: Tracks
+
     static let ids = "ids"
-    
+
+    // MARK: Playlists
+
+    static let playlistId = "playlist_id"
+
     // MARK: Search
+
     static let query = "q"
 }
 

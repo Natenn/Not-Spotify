@@ -25,6 +25,13 @@ struct SearchView: View {
 
                                     PlayerViewModel.shared.play(track: track)
                                 }
+                                .contextMenu {
+                                    ForEach(viewModel.contextMenuItems(trackId: track.id)) { item in
+                                        Button(action: item.action) {
+                                            Label(item.label, systemImage: item.systemName)
+                                        }
+                                    }
+                                }
                         case let .playlist(playlist):
                             PlaylistNavigationItemView(
                                 name: playlist.name,
@@ -33,6 +40,13 @@ struct SearchView: View {
                                 endpoint: Endpoint.playlistTracks(playlistId: playlist.id),
                                 imageUrl: playlist.imageUrl
                             )
+                            .contextMenu {
+                                ForEach(viewModel.contextMenuItems(playlistId: playlist.id)) { item in
+                                    Button(action: item.action) {
+                                        Label(item.label, systemImage: item.systemName)
+                                    }
+                                }
+                            }
                         }
                     }
 
