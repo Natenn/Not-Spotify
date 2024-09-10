@@ -57,6 +57,11 @@ struct LibraryView: View {
                         endpoint: Endpoint.playlistTracks(playlistId: playlist.id),
                         imageUrl: playlist.imageUrl
                     )
+                    .contextMenu {
+                        Button(action: { viewModel.unfollowPlaylist(playlistId: playlist.id) }) {
+                            Label("Remove from Library", systemImage: "bookmark.slash")
+                        }
+                    }
                 }
             }
 

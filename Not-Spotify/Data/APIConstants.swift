@@ -46,6 +46,7 @@ enum Endpoint {
     static let savedTracks = "me/tracks"
     static let checkSavedTracks = "me/tracks/contains"
     static func playlistTracks(playlistId: String) -> String { "playlists/\(playlistId)/tracks" }
+    static func playlistFollowers(playlistId: String) -> String { "playlists/\(playlistId)/followers" }
     static let search = "search"
 }
 

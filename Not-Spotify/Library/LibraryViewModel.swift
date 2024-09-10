@@ -25,7 +25,7 @@ final class LibraryViewModel: ObservableObject {
                 APIKeys.offset: currentOffset,
             ]
         )
-        
+
         Task {
             try await Network.shared.execute(request, expecting: PlaylistsResponse.self, success: { response in
                 DispatchQueue.main.async { [weak self] in
@@ -54,6 +54,23 @@ final class LibraryViewModel: ObservableObject {
                 DispatchQueue.main.async { [weak self] in
                     self?.tracks = response.items
                     self?.favouriteTracksCount = response.total
+                }
+            })
+        }
+    }
+
+    func unfollowPlaylist(playlistId: String) {
+        let request = Request(
+            endpoint: Endpoint.playlistFollowers(playlistId: playlistId),
+            method: .delete
+        )
+
+        Task {
+            try await Network.shared.execute(request, expecting: EmptyResponse.self, success: { _ in
+                DispatchQueue.main.async { [weak self] in
+                    self?.playlists.removeAll(where: {
+                        $0.id == playlistId
+                    })
                 }
             })
         }
