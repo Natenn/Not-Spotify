@@ -21,6 +21,16 @@
         }
       }
     },
+    "Remove from Library" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "წაშალე კოლექციიდან"
+          }
+        }
+      }
+    },
     "Search" : {
       "localizations" : {
         "ka-GE" : {

@@ -8,8 +8,12 @@
 import Foundation
 import SwiftNetwork
 
+// MARK: - PlaylistViewModel
+
 final class PlaylistViewModel: ObservableObject {
-    @Published var tracks: [Track] = []
+    @Published var tracks = [Track]()
+
+    @Published var areSaved = [String: Bool]()
 
     var total: Int
     var endpoint: String
@@ -44,9 +48,13 @@ final class PlaylistViewModel: ObservableObject {
 
                     if shouldOverwrite {
                         self?.tracks = []
+                        self?.areSaved = [:]
                     }
                     self?.tracks.append(contentsOf: tracks)
                     self?.currentOffset += response.items.count
+                    for track in tracks {
+                        self?.checkSavedTracks(by: track.id)
+                    }
                 }
             })
         }
@@ -59,5 +67,31 @@ final class PlaylistViewModel: ObservableObject {
 
     var shouldFetchMoreSongs: Bool {
         !tracks.isEmpty && currentOffset < total
+    }
+}
+
+// MARK: - ContextMenuItem
+
+struct ContextMenuItem: Identifiable {
+    let id: Int
+    let label: String
+    let systemName: String
+    let action: () -> Void
+}
+
+// MARK: - PlaylistViewModel + ContextMenuableTrack
+
+extension PlaylistViewModel: ContextMenuableTrack {
+    func removeTrack(by id: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.tracks.removeAll(where: { $0.id == id })
+            self?.areSaved.removeValue(forKey: id)
+        }
+    }
+
+    func updateTrackStatus(for trackId: String, isSaved: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.areSaved[trackId] = isSaved
+        }
     }
 }

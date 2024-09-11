@@ -13,6 +13,9 @@ import SwiftNetwork
 final class SearchViewModel: ObservableObject {
     @Published var searchResults = [SearchResult]()
 
+    @Published var areSaved = [String: Bool]()
+    @Published var areCollected = [String: Bool]()
+
     @Published var query: String = ""
 
     private let offset = 10
@@ -38,6 +41,8 @@ final class SearchViewModel: ObservableObject {
                 DispatchQueue.main.async { [weak self] in
                     if shouldOverwrite {
                         self?.searchResults = []
+                        self?.areSaved = [:]
+                        self?.areCollected = [:]
                     }
 
                     self?.searchResults.append(contentsOf: response.tracks.items.compactMap {
@@ -46,6 +51,13 @@ final class SearchViewModel: ObservableObject {
                     self?.searchResults.append(contentsOf: response.playlists.items.compactMap {
                         .playlist(playlist: $0)
                     })
+
+                    for track in response.tracks.items {
+                        self?.checkSavedTracks(by: track.id)
+                    }
+                    for playlist in response.playlists.items {
+                        self?.checkFollowedPlaylists(by: playlist.id)
+                    }
 
                     self?.currentOffset += response.playlists.items.count + response.tracks.items.count
                 }
@@ -67,5 +79,29 @@ final class SearchViewModel: ObservableObject {
 extension String {
     var queryString: String {
         replacingOccurrences(of: " ", with: "%20")
+    }
+}
+
+// MARK: - SearchViewModel + ContextMenuableTrack
+
+extension SearchViewModel: ContextMenuableTrack {
+    var endpoint: String { "" }
+
+    func removeTrack(by _: String) {}
+
+    func updateTrackStatus(for trackId: String, isSaved: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.areSaved[trackId] = isSaved
+        }
+    }
+}
+
+// MARK: - SearchViewModel + ContextMenuablePlaylist
+
+extension SearchViewModel: ContextMenuablePlaylist {
+    func updatePlaylistStatus(for playlistId: String, isCollected: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.areCollected[playlistId] = isCollected
+        }
     }
 }
