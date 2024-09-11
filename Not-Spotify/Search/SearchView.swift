@@ -26,7 +26,7 @@ struct SearchView: View {
                                     PlayerViewModel.shared.play(track: track)
                                 }
                                 .contextMenu {
-                                    ForEach(viewModel.contextMenuItems(trackId: track.id)) { item in
+                                    ForEach(viewModel.contextMenuItems(for: track.id)) { item in
                                         Button(action: item.action) {
                                             Label(item.label, systemImage: item.systemName)
                                         }

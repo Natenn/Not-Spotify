@@ -79,87 +79,19 @@ struct ContextMenuItem: Identifiable {
     let action: () -> Void
 }
 
-extension PlaylistViewModel {
-    func contextMenuItems(for trackId: String) -> [ContextMenuItem] {
-        var items = [ContextMenuItem]()
+// MARK: - PlaylistViewModel + ContextMenuableTrack
 
-        if areSaved[trackId] == true {
-            items.append(ContextMenuItem(
-                id: 0,
-                label: "Remove from Favourites",
-                systemName: "minus.circle",
-                action: { [weak self] in
-                    self?.toggleSavedTrack(by: trackId)
-                }
-            ))
-        } else {
-            items.append(ContextMenuItem(
-                id: 0,
-                label: "Add to Favourites",
-                systemName: "heart",
-                action: { [weak self] in
-                    self?.toggleSavedTrack(by: trackId)
-                }
-            ))
-        }
-
-        items.append(ContextMenuItem(
-            id: 1,
-            label: "Add to Playlist",
-            systemName: "bookmark",
-            action: { /*TODO: Implement*/ }
-        ))
-
-        return items
-    }
-
-    private func checkSavedTracks(by id: String) {
-        let request = Request(
-            endpoint: Endpoint.checkSavedTracks,
-            query: [
-                APIKeys.ids: id,
-            ]
-        )
-
-        Task {
-            try await Network.shared.execute(request, expecting: [Bool].self, success: { response in
-                DispatchQueue.main.sync { [weak self] in
-                    self?.areSaved[id] = response.first
-                }
-            })
+extension PlaylistViewModel: ContextMenuableTrack {
+    func removeTrack(by id: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.tracks.removeAll(where: { $0.id == id })
+            self?.areSaved.removeValue(forKey: id)
         }
     }
 
-    private func toggleSavedTrack(by trackId: String) {
-        let request = Request(
-            endpoint: Endpoint.savedTracks,
-            method: savedTracksMethod(for: trackId),
-            body: [
-                APIKeys.ids: [trackId],
-            ]
-        )
-
-        Task {
-            try await Network.shared.execute(request, expecting: EmptyResponse.self)
-            DispatchQueue.main.async { [weak self] in
-                self?.areSaved[trackId]?.toggle()
-                if self?.endpoint == Endpoint.savedTracks {
-                    self?.tracks.removeAll(where: { $0.id == trackId })
-                    self?.areSaved.removeValue(forKey: trackId)
-                }
-            }
+    func updateTrackStatus(for trackId: String, isSaved: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.areSaved[trackId] = isSaved
         }
-    }
-
-    private func savedTracksMethod(for trackId: String) -> HTTPMethod {
-        guard let isSaved = areSaved[trackId] else {
-            return endpoint == Endpoint.savedTracks ? .delete : .put
-        }
-
-        if isSaved {
-            return .delete
-        }
-
-        return .put
     }
 }

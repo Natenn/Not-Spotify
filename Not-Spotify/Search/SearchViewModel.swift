@@ -82,160 +82,26 @@ extension String {
     }
 }
 
-// MARK: - Context Menu for tracks
+// MARK: - SearchViewModel + ContextMenuableTrack
 
-extension SearchViewModel {
-    func contextMenuItems(trackId: String) -> [ContextMenuItem] {
-        var items = [ContextMenuItem]()
+extension SearchViewModel: ContextMenuableTrack {
+    var endpoint: String { "" }
 
-        if areSaved[trackId] == true {
-            items.append(ContextMenuItem(
-                id: 0,
-                label: "Remove from Favourites",
-                systemName: "minus.circle",
-                action: { [weak self] in
-                    self?.toggleSavedTrack(by: trackId)
-                }
-            ))
-        } else {
-            items.append(ContextMenuItem(
-                id: 0,
-                label: "Add to Favourites",
-                systemName: "heart",
-                action: { [weak self] in
-                    self?.toggleSavedTrack(by: trackId)
-                }
-            ))
+    func removeTrack(by _: String) {}
+
+    func updateTrackStatus(for trackId: String, isSaved: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.areSaved[trackId] = isSaved
         }
-
-        items.append(ContextMenuItem(
-            id: 1,
-            label: "Add to Playlist",
-            systemName: "bookmark",
-            action: { /* TODO: Implement */ }
-        ))
-
-        return items
-    }
-
-    private func toggleSavedTrack(by trackId: String) {
-        let request = Request(
-            endpoint: Endpoint.savedTracks,
-            method: savedTracksMethod(for: trackId),
-            body: [
-                APIKeys.ids: [trackId],
-            ]
-        )
-
-        Task {
-            try await Network.shared.execute(request, expecting: EmptyResponse.self, success: { _ in
-                DispatchQueue.main.async { [weak self] in
-                    self?.areSaved[trackId]?.toggle()
-                }
-            })
-        }
-    }
-
-    private func checkSavedTracks(by id: String) {
-        let request = Request(
-            endpoint: Endpoint.checkSavedTracks,
-            query: [
-                APIKeys.ids: id,
-            ]
-        )
-
-        Task {
-            try await Network.shared.execute(request, expecting: [Bool].self, success: { response in
-                DispatchQueue.main.sync { [weak self] in
-                    self?.areSaved[id] = response.first
-                }
-            })
-        }
-    }
-
-    private func savedTracksMethod(for trackId: String) -> HTTPMethod {
-        guard let isSaved = areSaved[trackId] else {
-            return .put
-        }
-
-        if isSaved {
-            return .delete
-        }
-
-        return .put
     }
 }
 
-// MARK: - Context Menu for playlists
+// MARK: - SearchViewModel + ContextMenuablePlaylist
 
-extension SearchViewModel {
-    func contextMenuItems(playlistId: String) -> [ContextMenuItem] {
-        var items = [ContextMenuItem]()
-
-        if areCollected[playlistId] == true {
-            items.append(ContextMenuItem(
-                id: 0,
-                label: "Remove from Library",
-                systemName: "bookmark.slash",
-                action: { [weak self] in
-                    self?.toggleSavedPlaylist(by: playlistId)
-                }
-            ))
-        } else {
-            items.append(ContextMenuItem(
-                id: 0,
-                label: "Add to Library",
-                systemName: "bookmark",
-                action: { [weak self] in
-                    self?.toggleSavedPlaylist(by: playlistId)
-                }
-            ))
+extension SearchViewModel: ContextMenuablePlaylist {
+    func updatePlaylistStatus(for playlistId: String, isCollected: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.areCollected[playlistId] = isCollected
         }
-
-        return items
-    }
-
-    private func toggleSavedPlaylist(by playlistId: String) {
-        let request = Request(
-            endpoint: Endpoint.playlistFollowers(playlistId: playlistId),
-            method: savedPlaylistsMethod(for: playlistId)
-        )
-
-        Task {
-            try await Network.shared.execute(request, expecting: EmptyResponse.self, success: { _ in
-                DispatchQueue.main.async { [weak self] in
-                    self?.areCollected[playlistId]?.toggle()
-                }
-            })
-        }
-    }
-
-    private func checkFollowedPlaylists(by id: String) {
-        let request = Request(
-            endpoint: Endpoint.playlistFollowersContains(playlistId: id),
-            query: [
-                APIKeys.playlistId: id,
-            ]
-        )
-
-        Task {
-            try await Network.shared.execute(request, expecting: [Bool].self, success: { response in
-                DispatchQueue.main.sync { [weak self] in
-                    self?.areCollected[id] = response.first
-                }
-            })
-        }
-    }
-
-    private func savedPlaylistsMethod(for playlistId: String) -> HTTPMethod {
-        guard let isSaved = areCollected[playlistId] else {
-            return .put
-        }
-
-        if isSaved {
-            return .delete
-        }
-
-        return .put
     }
 }
