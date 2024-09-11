@@ -1,12 +1,42 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Crate" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "შექმნა"
+          }
+        }
+      }
+    },
+    "Description" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "აღწერა"
+          }
+        }
+      }
+    },
     "Library" : {
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "კოლექცია"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "სახელი"
           }
         }
       }

@@ -48,7 +48,9 @@ enum Endpoint {
     static func playlistTracks(playlistId: String) -> String { "playlists/\(playlistId)/tracks" }
     static func playlistFollowers(playlistId: String) -> String { "playlists/\(playlistId)/followers" }
     static func playlistFollowersContains(playlistId: String) -> String { "playlists/\(playlistId)/followers/contains" }
+    static func createPlaylist(userId: String) -> String { "users/\(userId)/playlists" }
     static let search = "search"
+    static let me = "me"
 }
 
 // MARK: - APIKeys
@@ -81,6 +83,8 @@ enum APIKeys {
     // MARK: Playlists
 
     static let playlistId = "playlist_id"
+    static let name = "name"
+    static let description = "description"
 
     // MARK: Search
 

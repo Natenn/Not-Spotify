@@ -8,10 +8,24 @@
 import Foundation
 import SwiftNetwork
 
+// MARK: - LibraryViewModel
+
 final class LibraryViewModel: ObservableObject {
-    @Published var playlists: [SimplifiedPlaylistObject] = []
-    @Published var tracks: [SavedTrackObject] = []
-    @Published var favouriteTracksCount: Int = 0
+    @Published private(set) var playlists: [SimplifiedPlaylistObject] = []
+    @Published private(set) var tracks: [SavedTrackObject] = []
+    @Published private(set) var favouriteTracksCount: Int = 0
+
+    private let group = DispatchGroup()
+
+    private(set) var userId = ""
+
+    @Published var isShowingSheet = false
+    @Published var name: String = ""
+    @Published var description: String = ""
+
+    var isDisabled: Bool {
+        name.isEmpty
+    }
 
     private var total = 0
     private let offset = 20
@@ -84,5 +98,54 @@ final class LibraryViewModel: ObservableObject {
 
     var shouldFetchMorePlaylists: Bool {
         !playlists.isEmpty && currentOffset < total
+    }
+}
+
+// MARK: - Crate Playlist
+
+extension LibraryViewModel {
+    func createPlaylist() {
+        group.wait()
+
+        let request = Request(
+            endpoint: Endpoint.createPlaylist(userId: userId),
+            method: .post,
+            body: [
+                APIKeys.name: name,
+                APIKeys.description: description,
+            ]
+        )
+
+        Task {
+            try await Network.shared.execute(
+                request,
+                expecting: SimplifiedPlaylistObject.self,
+                success: { _ in
+                    DispatchQueue.main.async { [weak self] in
+                        self?.refreshPlaylists()
+                        self?.isShowingSheet.toggle()
+                        self?.name = ""
+                        self?.description = ""
+                    }
+                }
+            )
+        }
+    }
+
+    func getUserId() {
+        group.enter()
+
+        let request = Request(endpoint: Endpoint.me)
+
+        Task {
+            try await Network.shared.execute(
+                request,
+                expecting: CurrentUserResponseModel.self,
+                success: { [weak self] response in
+                    self?.userId = response.id
+                    self?.group.leave()
+                }
+            )
+        }
     }
 }

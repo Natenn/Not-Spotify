@@ -27,7 +27,7 @@ struct SimplifiedPlaylistObject: Identifiable, Decodable {
     let external_urls: ExternalUrls
     let href: String
     let id: String
-    let images: [ImageObject]
+    let images: [ImageObject]?
     let name: String
     let owner: Owner
     let `public`: Bool?
@@ -55,7 +55,7 @@ extension SimplifiedPlaylistObject {
     }
 
     var imageUrl: String? {
-        images.first?.url
+        images?.first?.url
     }
     
     var total: Int {

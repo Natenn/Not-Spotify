@@ -25,6 +25,9 @@ struct LibraryView: View {
                 viewModel.refreshPlaylists()
             }
             .task {
+                if viewModel.userId.isEmpty {
+                    viewModel.getUserId()
+                }
                 if viewModel.playlists.isEmpty {
                     viewModel.fetchPlaylists()
                 }
@@ -33,6 +36,30 @@ struct LibraryView: View {
                 }
             }
             .navigationTitle("Library")
+            .toolbar {
+                Button(action: { viewModel.isShowingSheet.toggle() }) {
+                    Image(systemName: "plus")
+                }
+                .sheet(isPresented: $viewModel.isShowingSheet) {
+                    createPlaylistForm
+                        .presentationDetents([.medium, .medium])
+                }
+            }
+        }
+    }
+    
+    private var createPlaylistForm: some View {
+        return Form {
+            Section {
+                TextField("Name", text: $viewModel.name)
+                TextField("Description", text: $viewModel.description)
+            }
+            Button(action: viewModel.createPlaylist) {
+                Text("Crate")
+            }.disabled(viewModel.isDisabled)
+        }
+        .task {
+            viewModel.getUserId()
         }
     }
 
@@ -55,7 +82,8 @@ struct LibraryView: View {
                         subtitle: playlist.subtitle,
                         total: playlist.total,
                         endpoint: Endpoint.playlistTracks(playlistId: playlist.id),
-                        imageUrl: playlist.imageUrl
+                        imageUrl: playlist.imageUrl,
+                        systemName: "music.note.list"
                     )
                     .contextMenu {
                         Button(action: { viewModel.unfollowPlaylist(playlistId: playlist.id) }) {
