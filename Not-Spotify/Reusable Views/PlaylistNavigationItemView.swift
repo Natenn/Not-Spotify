@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct PlaylistNavigationItemView: View {
+    let id: String
+    let snapshotId: String
+    let ownerId: String
     let name: String
     let subtitle: String
     let total: Int
@@ -19,6 +22,9 @@ struct PlaylistNavigationItemView: View {
         NavigationLink(destination:
             PlaylistView(
                 viewModel: PlaylistViewModel(
+                    id: id,
+                    snapshotId: snapshotId,
+                    ownerId: ownerId,
                     name: name,
                     total: total,
                     endpoint: endpoint
@@ -31,5 +37,5 @@ struct PlaylistNavigationItemView: View {
 }
 
 #Preview {
-    PlaylistNavigationItemView(name: "Playlist", subtitle: "Description", total: 50, endpoint: "", imageUrl: "", systemName: "heart.fill")
+    PlaylistNavigationItemView(id: "", snapshotId: "", ownerId: "", name: "Playlist", subtitle: "Description", total: 50, endpoint: "", imageUrl: "", systemName: "heart.fill")
 }

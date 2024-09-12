@@ -12,16 +12,20 @@ import SwiftNetwork
 
 protocol ContextMenuableTrack {
     var areSaved: [String: Bool] { get set }
+    var id: String { get }
+    var snapshotId: String { get }
+    var ownerId: String { get }
     var endpoint: String { get }
 
-    func contextMenuItems(for trackId: String) -> [ContextMenuItem]
+    func contextMenuItems(for trackId: String, and trackUri: String) -> [ContextMenuItem]
     func checkSavedTracks(by id: String)
     func removeTrack(by id: String)
     func updateTrackStatus(for trackId: String, isSaved: Bool)
+    func addItemToPlaylist()
 }
 
 extension ContextMenuableTrack {
-    func contextMenuItems(for trackId: String) -> [ContextMenuItem] {
+    func contextMenuItems(for trackId: String, and trackUri: String) -> [ContextMenuItem] {
         var items = [ContextMenuItem]()
 
         if areSaved[trackId] == true {
@@ -48,8 +52,21 @@ extension ContextMenuableTrack {
             id: 1,
             label: "Add to Playlist",
             systemName: "bookmark",
-            action: { /* TODO: Implement */ }
+            action: {
+                addItemToPlaylist()
+            }
         ))
+
+        if !id.isEmpty, !snapshotId.isEmpty, ownerId == AuthManager.shared.userId {
+            items.append(ContextMenuItem(
+                id: 2,
+                label: "Remove from Playlist",
+                systemName: "bookmark.slash",
+                action: {
+                    removeTrackFromPlaylist(by: trackId, and: trackUri)
+                }
+            ))
+        }
 
         return items
     }
@@ -98,5 +115,30 @@ extension ContextMenuableTrack {
         }
 
         return isSaved ? .delete : .put
+    }
+
+    private func removeTrackFromPlaylist(by trackId: String, and trackUri: String) {
+        let request = Request(
+            endpoint: Endpoint.playlistTracks(playlistId: id),
+            method: .delete,
+            body: [
+                APIKeys.tracks: [
+                    [
+                        APIKeys.uri: trackUri,
+                    ],
+                ],
+                APIKeys.snapshotId: snapshotId,
+            ]
+        )
+
+        Task {
+            try await Network.shared.execute(
+                request,
+                expecting: PlaylistSnapshotId.self,
+                success: { _ in
+                    removeTrack(by: trackId)
+                }
+            )
+        }
     }
 }

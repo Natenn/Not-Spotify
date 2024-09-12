@@ -12,6 +12,8 @@ final class AuthManager: ObservableObject {
     static let shared = AuthManager()
 
     private init() {}
+    
+    private(set) var userId: String = ""
 
     public var isAuthorised: Bool {
         UserDefaults.standard.string(forKey: UserDefaultsKeys.accessToken) != nil
@@ -86,5 +88,19 @@ final class AuthManager: ObservableObject {
         }
 
         group.wait()
+    }
+    
+    func getUserId() {        
+        let request = Request(endpoint: Endpoint.me)
+        
+        Task {
+            try await Network.shared.execute(
+                request,
+                expecting: CurrentUserResponseModel.self,
+                success: { [weak self] response in
+                    self?.userId = response.id
+                }
+            )
+        }
     }
 }

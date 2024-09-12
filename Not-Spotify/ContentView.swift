@@ -12,7 +12,11 @@ struct ContentView: View {
 
     var body: some View {
         if AuthManager.shared.isAuthorised || viewModel.authDidSucceed {
-            TabBarView()
+            TabBarView().task {
+                if AuthManager.shared.userId.isEmpty {
+                    AuthManager.shared.getUserId()
+                }
+            }
         } else {
             AuthWebView(viewModel: viewModel).ignoresSafeArea()
         }

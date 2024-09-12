@@ -15,7 +15,8 @@ final class SearchViewModel: ObservableObject {
 
     @Published var areSaved = [String: Bool]()
     @Published var areCollected = [String: Bool]()
-
+    
+    @Published var isShowingSheet = false
     @Published var query: String = ""
 
     private let offset = 10
@@ -85,6 +86,22 @@ extension String {
 // MARK: - SearchViewModel + ContextMenuableTrack
 
 extension SearchViewModel: ContextMenuableTrack {
+    var ownerId: String {
+        ""
+    }
+    
+    var id: String {
+        ""
+    }
+    
+    var snapshotId: String {
+        ""
+    }
+    
+    func addItemToPlaylist() {
+        isShowingSheet.toggle()
+    }
+    
     var endpoint: String { "" }
 
     func removeTrack(by _: String) {}

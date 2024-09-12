@@ -25,9 +25,6 @@ struct LibraryView: View {
                 viewModel.refreshPlaylists()
             }
             .task {
-                if viewModel.userId.isEmpty {
-                    viewModel.getUserId()
-                }
                 if viewModel.playlists.isEmpty {
                     viewModel.fetchPlaylists()
                 }
@@ -47,7 +44,7 @@ struct LibraryView: View {
             }
         }
     }
-    
+
     private var createPlaylistForm: some View {
         return Form {
             Section {
@@ -58,13 +55,13 @@ struct LibraryView: View {
                 Text("Crate")
             }.disabled(viewModel.isDisabled)
         }
-        .task {
-            viewModel.getUserId()
-        }
     }
 
     private var favourites: some View {
         PlaylistNavigationItemView(
+            id: "",
+            snapshotId: "",
+            ownerId: "",
             name: "Favourites",
             subtitle: "\(viewModel.favouriteTracksCount) favourite songs",
             total: viewModel.favouriteTracksCount,
@@ -78,6 +75,9 @@ struct LibraryView: View {
             LazyVGrid(columns: [GridItem()]) {
                 ForEach(viewModel.playlists) { playlist in
                     PlaylistNavigationItemView(
+                        id: playlist.id,
+                        snapshotId: playlist.snapshot_id,
+                        ownerId: playlist.ownerId,
                         name: playlist.name,
                         subtitle: playlist.subtitle,
                         total: playlist.total,

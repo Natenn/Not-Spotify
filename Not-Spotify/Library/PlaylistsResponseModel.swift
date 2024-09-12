@@ -44,6 +44,10 @@ struct Owner: Decodable {
     let display_name: String?
 }
 
+struct PlaylistSnapshotId: Decodable {
+    let snapshot_id: String
+}
+
 extension SimplifiedPlaylistObject {
     var subtitle: String {
         let totalTracks = tracks.total ?? 0
@@ -57,8 +61,12 @@ extension SimplifiedPlaylistObject {
     var imageUrl: String? {
         images?.first?.url
     }
-    
+
     var total: Int {
         tracks.total ?? 0
+    }
+    
+    var ownerId: String {
+        owner.id ?? ""
     }
 }

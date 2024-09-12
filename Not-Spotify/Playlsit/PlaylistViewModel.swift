@@ -15,6 +15,11 @@ final class PlaylistViewModel: ObservableObject {
 
     @Published var areSaved = [String: Bool]()
 
+    @Published var isShowingSheet = false
+
+    var id: String
+    var snapshotId: String
+    var ownerId: String
     var total: Int
     var endpoint: String
     var name: String
@@ -22,7 +27,10 @@ final class PlaylistViewModel: ObservableObject {
     private let offset = 20
     private(set) var currentOffset = 0
 
-    init(name: String, total: Int, endpoint: String) {
+    init(id: String, snapshotId: String, ownerId: String, name: String, total: Int, endpoint: String) {
+        self.id = id
+        self.snapshotId = snapshotId
+        self.ownerId = ownerId
         self.name = name
         self.total = total
         self.endpoint = endpoint
@@ -82,6 +90,10 @@ struct ContextMenuItem: Identifiable {
 // MARK: - PlaylistViewModel + ContextMenuableTrack
 
 extension PlaylistViewModel: ContextMenuableTrack {
+    func addItemToPlaylist() {
+        isShowingSheet.toggle()
+    }
+
     func removeTrack(by id: String) {
         DispatchQueue.main.async { [weak self] in
             self?.tracks.removeAll(where: { $0.id == id })
