@@ -26,14 +26,25 @@ struct SearchView: View {
                                     PlayerViewModel.shared.play(track: track)
                                 }
                                 .contextMenu {
-                                    ForEach(viewModel.contextMenuItems(for: track.id)) { item in
+                                    ForEach(viewModel.contextMenuItems(for: track.id, and: track.uri)) { item in
                                         Button(action: item.action) {
                                             Label(item.label, systemImage: item.systemName)
                                         }
                                     }
                                 }
+                                .sheet(isPresented: $viewModel.isShowingSheet) {
+                                    OwnedPlaylistsView(trackUri: track.uri, parentPlaylistId: viewModel.id) {
+                                        DispatchQueue.main.async {
+                                            viewModel.isShowingSheet.toggle()
+                                        }
+                                    }
+                                    .presentationDetents([.medium, .large])
+                                }
                         case let .playlist(playlist):
                             PlaylistNavigationItemView(
+                                id: playlist.id,
+                                snapshotId: playlist.snapshot_id,
+                                ownerId: playlist.ownerId,
                                 name: playlist.name,
                                 subtitle: playlist.subtitle,
                                 total: playlist.total,
@@ -41,7 +52,7 @@ struct SearchView: View {
                                 imageUrl: playlist.imageUrl
                             )
                             .contextMenu {
-                                ForEach(viewModel.contextMenuItems(playlistId: playlist.id)) { item in
+                                ForEach(viewModel.contextMenuItems(for: playlist.id)) { item in
                                     Button(action: item.action) {
                                         Label(item.label, systemImage: item.systemName)
                                     }

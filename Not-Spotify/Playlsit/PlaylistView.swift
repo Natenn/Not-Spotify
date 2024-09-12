@@ -25,11 +25,19 @@ struct PlaylistView: View {
                             PlayerViewModel.shared.play(track: track)
                         }
                         .contextMenu {
-                            ForEach(viewModel.contextMenuItems(for: track.id)) { item in
+                            ForEach(viewModel.contextMenuItems(for: track.id, and: track.uri)) { item in
                                 Button(action: item.action) {
                                     Label(item.label, systemImage: item.systemName)
                                 }
                             }
+                        }
+                        .sheet(isPresented: $viewModel.isShowingSheet) {
+                            OwnedPlaylistsView(trackUri: track.uri, parentPlaylistId: viewModel.id) {
+                                DispatchQueue.main.async {
+                                    viewModel.isShowingSheet.toggle()
+                                }
+                            }
+                            .presentationDetents([.medium, .large])
                         }
                 }
 
@@ -63,5 +71,5 @@ struct PlaylistView: View {
 }
 
 #Preview {
-    PlaylistView(viewModel: PlaylistViewModel(name: "Playlist", total: 50, endpoint: ""))
+    PlaylistView(viewModel: PlaylistViewModel(id: "", snapshotId: "", ownerId: "", name: "Playlist", total: 50, endpoint: ""))
 }

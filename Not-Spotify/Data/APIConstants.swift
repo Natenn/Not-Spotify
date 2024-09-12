@@ -79,12 +79,16 @@ enum APIKeys {
     // MARK: Tracks
 
     static let ids = "ids"
+    static let tracks = "tracks"
+    static let uri = "uri"
 
     // MARK: Playlists
 
     static let playlistId = "playlist_id"
     static let name = "name"
     static let description = "description"
+    static let uris = "uris"
+    static let snapshotId = "snapshot_id"
 
     // MARK: Search
 

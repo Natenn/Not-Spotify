@@ -15,10 +15,6 @@ final class LibraryViewModel: ObservableObject {
     @Published private(set) var tracks: [SavedTrackObject] = []
     @Published private(set) var favouriteTracksCount: Int = 0
 
-    private let group = DispatchGroup()
-
-    private(set) var userId = ""
-
     @Published var isShowingSheet = false
     @Published var name: String = ""
     @Published var description: String = ""
@@ -105,10 +101,8 @@ final class LibraryViewModel: ObservableObject {
 
 extension LibraryViewModel {
     func createPlaylist() {
-        group.wait()
-
         let request = Request(
-            endpoint: Endpoint.createPlaylist(userId: userId),
+            endpoint: Endpoint.createPlaylist(userId: AuthManager.shared.userId),
             method: .post,
             body: [
                 APIKeys.name: name,
@@ -127,23 +121,6 @@ extension LibraryViewModel {
                         self?.name = ""
                         self?.description = ""
                     }
-                }
-            )
-        }
-    }
-
-    func getUserId() {
-        group.enter()
-
-        let request = Request(endpoint: Endpoint.me)
-
-        Task {
-            try await Network.shared.execute(
-                request,
-                expecting: CurrentUserResponseModel.self,
-                success: { [weak self] response in
-                    self?.userId = response.id
-                    self?.group.leave()
                 }
             )
         }

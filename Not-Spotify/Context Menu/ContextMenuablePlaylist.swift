@@ -19,7 +19,7 @@ protocol ContextMenuablePlaylist {
 }
 
 extension ContextMenuablePlaylist {
-    func contextMenuItems(playlistId: String) -> [ContextMenuItem] {
+    func contextMenuItems(for playlistId: String) -> [ContextMenuItem] {
         var items = [ContextMenuItem]()
 
         if areCollected[playlistId] == true {
