@@ -21,6 +21,9 @@ struct TabBarView: View, KeyboardReadable {
             Tab("Search", systemImage: "magnifyingglass") {
                 SearchView()
             }
+            Tab("Settings", systemImage: "gearshape") {
+                SettingsView()
+            }
         }
         .onReceive(keyboardPublisher) { isKeyboardVisible in
             self.isKeyboardVisible = isKeyboardVisible

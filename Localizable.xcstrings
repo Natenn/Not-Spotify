@@ -1,6 +1,36 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Are you sure you want to log out?" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ნამდვილად გსურს გასვლა?"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გაუქმება"
+          }
+        }
+      }
+    },
+    "Colour Scheme" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ფერთა სქემა"
+          }
+        }
+      }
+    },
     "Crate" : {
       "localizations" : {
         "ka-GE" : {
@@ -21,12 +51,52 @@
         }
       }
     },
+    "Language" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ენა"
+          }
+        }
+      }
+    },
+    "Leave" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გასვლა"
+          }
+        }
+      }
+    },
     "Library" : {
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "კოლექცია"
+          }
+        }
+      }
+    },
+    "Log out" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გასვლა"
+          }
+        }
+      }
+    },
+    "Log Out" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გასვლა"
           }
         }
       }
@@ -77,6 +147,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "მოძებნე სიმღერები და კოლექციები"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "პარამეტრები"
           }
         }
       }
