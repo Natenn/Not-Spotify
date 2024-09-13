@@ -66,7 +66,7 @@ enum Locales: String, Identifiable, CaseIterable {
     var id: Self { self }
     case system
     case en
-    case kaGE = "ka-GE"
+    case ka
 }
 
 extension Locales {
@@ -76,7 +76,7 @@ extension Locales {
             return "System"
         case .en:
             return "English"
-        case .kaGE:
+        case .ka:
             return "Georgian"
         }
     }
