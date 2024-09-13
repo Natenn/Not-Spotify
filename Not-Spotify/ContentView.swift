@@ -20,6 +20,17 @@ struct ContentView: View {
             }
             .accentColor(.green)
             .preferredColorScheme(preferredTheme)
+            .environment(\.locale, .init(identifier: settingsViewModel.locale.rawValue))
+    }
+
+    private var currentLocale: Locale {
+        let locale = settingsViewModel.locale
+        switch locale {
+        case .system:
+            return .init(identifier: Locale.current.language.languageCode?.identifier ?? "en")
+        default:
+            return .init(identifier: locale.rawValue)
+        }
     }
 
     private var preferredTheme: ColorScheme? {

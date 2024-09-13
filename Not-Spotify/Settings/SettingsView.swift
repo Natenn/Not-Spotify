@@ -16,6 +16,7 @@ struct SettingsView: View {
             Form {
                 Section {
                     themePicker
+                    languagePicker
                 }
                 Button("Log out") {
                     showAlert = true
@@ -37,6 +38,16 @@ struct SettingsView: View {
             }
         } label: {
             Text("Colour Scheme")
+        }
+    }
+
+    private var languagePicker: some View {
+        Picker(selection: $viewModel.locale) {
+            ForEach(viewModel.languages) { item in
+                Text(item.title).tag(item.id)
+            }
+        } label: {
+            Text("Language")
         }
     }
 

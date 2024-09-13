@@ -26,7 +26,7 @@
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ფერთა სქემა"
+            "value" : "ფერები"
           }
         }
       }
@@ -41,12 +41,42 @@
         }
       }
     },
+    "Dark" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "მუქი"
+          }
+        }
+      }
+    },
     "Description" : {
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "აღწერა"
+          }
+        }
+      }
+    },
+    "English" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ინგლისური"
+          }
+        }
+      }
+    },
+    "Georgian" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ქართული"
           }
         }
       }
@@ -77,6 +107,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "კოლექცია"
+          }
+        }
+      }
+    },
+    "Light" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ღია"
           }
         }
       }
@@ -157,6 +197,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "პარამეტრები"
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "სისტემური"
           }
         }
       }

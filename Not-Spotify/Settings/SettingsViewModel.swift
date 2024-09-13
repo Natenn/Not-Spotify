@@ -14,6 +14,7 @@ final class SettingsViewModel: ObservableObject {
 
     private init() {
         _colourScheme = Published(initialValue: ColourScheme(rawValue: UserDefaults.standard.integer(forKey: "colourScheme")) ?? .system)
+        _locale = Published(initialValue: Locales(rawValue: UserDefaults.standard.string(forKey: "locale") ?? Locales.system.rawValue) ?? .system)
     }
 
     @Published var colourScheme: ColourScheme {
@@ -22,8 +23,18 @@ final class SettingsViewModel: ObservableObject {
         }
     }
 
+    @Published var locale: Locales {
+        didSet {
+            UserDefaults.standard.set(locale.rawValue, forKey: "locale")
+        }
+    }
+
     var colourSchemes: [ColourScheme] {
         ColourScheme.allCases
+    }
+
+    var languages: [Locales] {
+        Locales.allCases
     }
 }
 
@@ -37,11 +48,36 @@ enum ColourScheme: Int, Identifiable, CaseIterable {
 }
 
 extension ColourScheme {
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
-        case .system: return "System"
-        case .light: return "Light"
-        case .dark: return "Dark"
+        case .system:
+            return "System"
+        case .light:
+            return "Light"
+        case .dark:
+            return "Dark"
+        }
+    }
+}
+
+// MARK: - Locales
+
+enum Locales: String, Identifiable, CaseIterable {
+    var id: Self { self }
+    case system
+    case en
+    case kaGE = "ka-GE"
+}
+
+extension Locales {
+    var title: LocalizedStringResource {
+        switch self {
+        case .system:
+            return "System"
+        case .en:
+            return "English"
+        case .kaGE:
+            return "Georgian"
         }
     }
 }
