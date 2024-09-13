@@ -31,7 +31,7 @@ struct OwnedPlaylistsView: View {
                             }
                         }) {
                             ListItemView(
-                                title: playlist.name,
+                                title: .init(stringLiteral: playlist.name),
                                 subtitle: playlist.subtitle,
                                 url: playlist.imageUrl,
                                 systemName: "music.note.list"

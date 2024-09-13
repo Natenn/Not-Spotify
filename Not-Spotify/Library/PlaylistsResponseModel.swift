@@ -44,18 +44,18 @@ struct Owner: Decodable {
     let display_name: String?
 }
 
+// MARK: - PlaylistSnapshotId
+
 struct PlaylistSnapshotId: Decodable {
     let snapshot_id: String
 }
 
+// MARK: - SimplifiedPlaylistObject + Extensions
+
 extension SimplifiedPlaylistObject {
-    var subtitle: String {
+    var subtitle: LocalizedStringResource {
         let totalTracks = tracks.total ?? 0
-        var songCount = "\(totalTracks) song"
-        if totalTracks != 1 {
-            songCount.append("s")
-        }
-        return "\(owner.display_name ?? "") · \(songCount)"
+        return "\(owner.display_name ?? "") · \(totalTracks) song"
     }
 
     var imageUrl: String? {
@@ -65,7 +65,7 @@ extension SimplifiedPlaylistObject {
     var total: Int {
         tracks.total ?? 0
     }
-    
+
     var ownerId: String {
         owner.id ?? ""
     }

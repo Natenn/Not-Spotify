@@ -23,7 +23,7 @@ struct MiniPlayerView: View {
             HStack {
                 ListItemView(
                     title: viewModel.trackInfo.name,
-                    subtitle: viewModel.trackInfo.artist,
+                    subtitle: .init(stringLiteral: viewModel.trackInfo.artist),
                     url: viewModel.trackInfo.imageUrl,
                     systemName: "waveform",
                     isFilled: false

@@ -8,17 +8,39 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = AuthViewModel()
+    @StateObject private var settingsViewModel = SettingsViewModel.shared
 
     var body: some View {
-        if AuthManager.shared.isAuthorised || viewModel.authDidSucceed {
-            TabBarView().task {
+        TabBarView()
+            .task {
+                Network.shared.configureDefaultRequest()
                 if AuthManager.shared.userId.isEmpty {
                     AuthManager.shared.getUserId()
                 }
             }
-        } else {
-            AuthWebView(viewModel: viewModel).ignoresSafeArea()
+            .accentColor(.green)
+            .preferredColorScheme(preferredTheme)
+            .environment(\.locale, currentLocale)
+    }
+
+    private var currentLocale: Locale {
+        let locale = settingsViewModel.locale
+        switch locale {
+        case .system:
+            return .init(identifier: Locale.current.language.languageCode?.identifier ?? "")
+        default:
+            return .init(identifier: locale.rawValue)
+        }
+    }
+
+    private var preferredTheme: ColorScheme? {
+        switch settingsViewModel.colourScheme {
+        case .light:
+            return .light
+        case .dark:
+            return .dark
+        default:
+            return .none
         }
     }
 }

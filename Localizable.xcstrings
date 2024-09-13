@@ -1,12 +1,168 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ · %lld song" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$@ · %2$lld song"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$@ · %2$lld songs"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$@ · %2$lld songs"
+                }
+              }
+            }
+          }
+        },
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$lld სიმღერა"
+          }
+        }
+      }
+    },
+    "%lld favourite songs" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld favourite song"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld favourite songs"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld favourite songs"
+                }
+              }
+            }
+          }
+        },
+        "ka-GE" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ფავორიტი სიმღერა"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ფავორიტი სიმღერა"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ფავორიტი სიმღერა"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Add to Favourites" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დაამატე ფავორიტებში"
+          }
+        }
+      }
+    },
+    "Add to Library" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დაამატე კოლექციაში"
+          }
+        }
+      }
+    },
+    "Add to Playlist" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დაამატე სიაში"
+          }
+        }
+      }
+    },
+    "Are you sure you want to log out?" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ნამდვილად გსურს გასვლა?"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გაუქმება"
+          }
+        }
+      }
+    },
+    "Colour Scheme" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ფერები"
+          }
+        }
+      }
+    },
     "Crate" : {
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "შექმნა"
+          }
+        }
+      }
+    },
+    "Dark" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "მუქი"
           }
         }
       }
@@ -21,12 +177,92 @@
         }
       }
     },
+    "English" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ინგლისური"
+          }
+        }
+      }
+    },
+    "Favourites" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ფავორიტები"
+          }
+        }
+      }
+    },
+    "Georgian" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ქართული"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ენა"
+          }
+        }
+      }
+    },
+    "Leave" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გასვლა"
+          }
+        }
+      }
+    },
     "Library" : {
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "კოლექცია"
+          }
+        }
+      }
+    },
+    "Light" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ღია"
+          }
+        }
+      }
+    },
+    "Log out" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გასვლა"
+          }
+        }
+      }
+    },
+    "Log Out" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გასვლა"
           }
         }
       }
@@ -41,6 +277,16 @@
         }
       }
     },
+    "Oops" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oops"
+          }
+        }
+      }
+    },
     "Play" : {
       "localizations" : {
         "ka-GE" : {
@@ -51,12 +297,42 @@
         }
       }
     },
+    "Play Something" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ჩართე რამე"
+          }
+        }
+      }
+    },
+    "Remove from Favourites" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "წაშალე ფავორიტებიდან"
+          }
+        }
+      }
+    },
     "Remove from Library" : {
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "წაშალე კოლექციიდან"
+          }
+        }
+      }
+    },
+    "Remove from Playlist" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "წაშალე სიიდან"
           }
         }
       }
@@ -77,6 +353,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "მოძებნე სიმღერები და კოლექციები"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "პარამეტრები"
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "სისტემური"
           }
         }
       }

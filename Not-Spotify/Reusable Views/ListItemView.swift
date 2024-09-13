@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ListItemView: View {
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringResource
+    let subtitle: LocalizedStringResource
     var url: String?
     var systemName: String?
     var isFilled: Bool = true

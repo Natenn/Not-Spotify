@@ -25,7 +25,7 @@ enum APICredentials {
 // MARK: - APIConstants
 
 enum APIConstants {
-    static let redirectUri = "https://github.com/Natenn"
+    static let redirectUri = "https://open.spotify.com"
     static let contentType = "application/x-www-form-urlencoded"
     static let searchedTypes = "track,playlist"
 }

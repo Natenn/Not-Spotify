@@ -16,7 +16,7 @@ struct PlaylistView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem()]) {
                 ForEach(viewModel.tracks) { track in
-                    ListItemView(title: track.name, subtitle: track.artist, url: track.imageUrl)
+                    ListItemView(title: .init(stringLiteral: track.name), subtitle: .init(stringLiteral: track.artist), url: track.imageUrl)
                         .onTapGesture {
                             guard track.preview_url != nil else {
                                 return
@@ -27,7 +27,7 @@ struct PlaylistView: View {
                         .contextMenu {
                             ForEach(viewModel.contextMenuItems(for: track.id, and: track.uri)) { item in
                                 Button(action: item.action) {
-                                    Label(item.label, systemImage: item.systemName)
+                                    LocalizedLabel(item.label, systemName: item.systemName)
                                 }
                             }
                         }
@@ -48,7 +48,7 @@ struct PlaylistView: View {
                 }
             }
             .padding(Constants.largerPadding)
-            .navigationTitle(viewModel.name)
+            .navigationTitle(Text(viewModel.name))
             .toolbar {
                 Button("Play") {
                     PlayerViewModel.shared.play(

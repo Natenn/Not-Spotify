@@ -9,13 +9,18 @@ import SwiftUI
 
 @main
 struct Not_SpotifyApp: App {
+    @StateObject private var authManager = AuthManager.shared
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .accentColor(.green)
-                .task {
-                    Network.shared.configureDefaultRequest()
-                }
+            if authManager.isAuthorised {
+                ContentView()
+                    .environmentObject(authManager)
+            } else {
+                AuthWebView(viewModel: AuthViewModel())
+                    .environmentObject(authManager)
+                    .ignoresSafeArea()
+            }
         }
     }
 }
