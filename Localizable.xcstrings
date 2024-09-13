@@ -87,6 +87,36 @@
         }
       }
     },
+    "Add to Favourites" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დაამატე ფავორიტებში"
+          }
+        }
+      }
+    },
+    "Add to Library" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დაამატე კოლექციაში"
+          }
+        }
+      }
+    },
+    "Add to Playlist" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დაამატე სიაში"
+          }
+        }
+      }
+    },
     "Are you sure you want to log out?" : {
       "localizations" : {
         "ka-GE" : {
@@ -277,12 +307,32 @@
         }
       }
     },
+    "Remove from Favourites" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "წაშალე ფავორიტებიდან"
+          }
+        }
+      }
+    },
     "Remove from Library" : {
       "localizations" : {
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "წაშალე კოლექციიდან"
+          }
+        }
+      }
+    },
+    "Remove from Playlist" : {
+      "localizations" : {
+        "ka-GE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "წაშალე სიიდან"
           }
         }
       }

@@ -28,7 +28,7 @@ struct SearchView: View {
                                 .contextMenu {
                                     ForEach(viewModel.contextMenuItems(for: track.id, and: track.uri)) { item in
                                         Button(action: item.action) {
-                                            Label(item.label, systemImage: item.systemName)
+                                            LocalizedLabel(item.label, systemName: item.systemName)
                                         }
                                     }
                                 }
@@ -54,7 +54,7 @@ struct SearchView: View {
                             .contextMenu {
                                 ForEach(viewModel.contextMenuItems(for: playlist.id)) { item in
                                     Button(action: item.action) {
-                                        Label(item.label, systemImage: item.systemName)
+                                        LocalizedLabel(item.label, systemName: item.systemName)
                                     }
                                 }
                             }

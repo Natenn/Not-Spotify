@@ -82,7 +82,7 @@ final class PlaylistViewModel: ObservableObject {
 
 struct ContextMenuItem: Identifiable {
     let id: Int
-    let label: String
+    let label: LocalizedStringResource
     let systemName: String
     let action: () -> Void
 }
