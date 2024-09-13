@@ -17,7 +17,7 @@ struct SearchView: View {
                     ForEach(viewModel.searchResults) { searchResult in
                         switch searchResult {
                         case let .track(track):
-                            ListItemView(title: track.name, subtitle: track.artist, url: track.imageUrl)
+                            ListItemView(title: .init(stringLiteral: track.name), subtitle: .init(stringLiteral: track.artist), url: track.imageUrl)
                                 .onTapGesture {
                                     guard track.preview_url != nil else {
                                         return
@@ -45,7 +45,7 @@ struct SearchView: View {
                                 id: playlist.id,
                                 snapshotId: playlist.snapshot_id,
                                 ownerId: playlist.ownerId,
-                                name: playlist.name,
+                                name: .init(stringLiteral: playlist.name),
                                 subtitle: playlist.subtitle,
                                 total: playlist.total,
                                 endpoint: Endpoint.playlistTracks(playlistId: playlist.id),

@@ -13,10 +13,10 @@ struct ContentView: View {
     var body: some View {
         TabBarView()
             .task {
+                Network.shared.configureDefaultRequest()
                 if AuthManager.shared.userId.isEmpty {
                     AuthManager.shared.getUserId()
                 }
-                Network.shared.configureDefaultRequest()
             }
             .accentColor(.green)
             .preferredColorScheme(preferredTheme)

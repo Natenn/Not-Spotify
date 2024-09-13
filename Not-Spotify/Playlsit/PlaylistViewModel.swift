@@ -22,12 +22,12 @@ final class PlaylistViewModel: ObservableObject {
     var ownerId: String
     var total: Int
     var endpoint: String
-    var name: String
+    var name: LocalizedStringResource
 
     private let offset = 20
     private(set) var currentOffset = 0
 
-    init(id: String, snapshotId: String, ownerId: String, name: String, total: Int, endpoint: String) {
+    init(id: String, snapshotId: String, ownerId: String, name: LocalizedStringResource, total: Int, endpoint: String) {
         self.id = id
         self.snapshotId = snapshotId
         self.ownerId = ownerId

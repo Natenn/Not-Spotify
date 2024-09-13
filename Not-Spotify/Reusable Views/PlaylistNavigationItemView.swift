@@ -11,13 +11,13 @@ struct PlaylistNavigationItemView: View {
     let id: String
     let snapshotId: String
     let ownerId: String
-    let name: String
-    let subtitle: String
+    let name: LocalizedStringResource
+    let subtitle: LocalizedStringResource
     let total: Int
     let endpoint: String
     var imageUrl: String? = nil
     var systemName: String? = nil
-    
+
     var body: some View {
         NavigationLink(destination:
             PlaylistView(

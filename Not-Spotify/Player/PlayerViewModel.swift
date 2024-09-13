@@ -59,7 +59,7 @@ final class PlayerViewModel: ObservableObject {
 
         return TrackInfo(
             id: track.id,
-            name: track.name,
+            name: .init(stringLiteral: track.name),
             artist: track.artists.first?.name ?? "😅😅",
             imageUrl: track.album?.images.first?.url ?? ""
         )

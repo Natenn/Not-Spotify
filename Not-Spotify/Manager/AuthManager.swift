@@ -12,7 +12,7 @@ final class AuthManager: ObservableObject {
     static let shared = AuthManager()
 
     private init() {}
-    
+
     private(set) var userId: String = ""
 
     @Published var isAuthorised = UserDefaults.standard.string(forKey: UserDefaultsKeys.accessToken) != nil
@@ -55,7 +55,7 @@ final class AuthManager: ObservableObject {
         UserDefaults.standard.setValue(authResponse.access_token, forKey: UserDefaultsKeys.accessToken)
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(authResponse.expires_in)), forKey: UserDefaultsKeys.expirationDate)
     }
-    
+
     func clearCache() {
         UserDefaults.standard.setValue(nil, forKey: UserDefaultsKeys.refreshToken)
         UserDefaults.standard.setValue(nil, forKey: UserDefaultsKeys.accessToken)
@@ -94,10 +94,10 @@ final class AuthManager: ObservableObject {
 
         group.wait()
     }
-    
-    func getUserId() {        
+
+    func getUserId() {
         let request = Request(endpoint: Endpoint.me)
-        
+
         Task {
             try await Network.shared.execute(
                 request,

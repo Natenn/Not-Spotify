@@ -11,7 +11,7 @@ import Foundation
 
 struct TrackInfo: Identifiable {
     let id: String
-    let name: String
+    let name: LocalizedStringResource
     let artist: String
     let imageUrl: String
 }

@@ -78,7 +78,7 @@ struct LibraryView: View {
                         id: playlist.id,
                         snapshotId: playlist.snapshot_id,
                         ownerId: playlist.ownerId,
-                        name: playlist.name,
+                        name: .init(stringLiteral: playlist.name),
                         subtitle: playlist.subtitle,
                         total: playlist.total,
                         endpoint: Endpoint.playlistTracks(playlistId: playlist.id),
