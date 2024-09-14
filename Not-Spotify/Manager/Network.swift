@@ -8,7 +8,7 @@
 import Foundation
 import SwiftNetwork
 
-final class Network {
+final class Network: Networkable {
     public static let shared = Network()
 
     private init() {}

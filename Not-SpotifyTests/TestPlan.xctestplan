@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "CBC496B9-F3BF-488E-904C-7BC714928313",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Not-Spotify.xcodeproj",
+        "identifier" : "932B1D5D2C76424200A28A39",
+        "name" : "Not-SpotifyTests"
+      }
+    }
+  ],
+  "version" : 1
+}
