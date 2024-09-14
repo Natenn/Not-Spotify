@@ -23,7 +23,7 @@ final class Network: Networkable {
             AuthManager.shared.updateToken()
         }
 
-        try await SwiftNetwork.shared.execute(
+        try await SwiftNetwork().execute(
             request,
             expecting: type,
             success: success,

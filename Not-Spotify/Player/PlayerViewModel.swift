@@ -225,7 +225,7 @@ final class PlayerViewModel: ObservableObject {
 
         group.enter()
         Task {
-            try await SwiftNetwork.shared.execute(request, expecting: TracksResponse.self, success: { [weak self] response in
+            try await Network.shared.execute(request, expecting: TracksResponse.self, success: { [weak self] response in
                 let tracks: [Track] = response.items.compactMap {
                     guard $0.track.preview_url != nil else {
                         return nil

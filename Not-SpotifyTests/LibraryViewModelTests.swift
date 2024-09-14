@@ -149,7 +149,7 @@ final class LibraryViewModelTests: XCTestCase {
     }
 
     func testrefreshPlaylists() async {
-        var expectation = XCTestExpectation()
+        let expectation = XCTestExpectation()
         let mockNetwork = MockNetwork()
         mockNetwork.execution = {
             expectation.fulfill()
