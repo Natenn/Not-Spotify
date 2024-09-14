@@ -112,7 +112,7 @@
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "დაამატე სიაში"
+            "value" : "დაამატე კოლექციაში"
           }
         }
       }
@@ -332,7 +332,7 @@
         "ka-GE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "წაშალე სიიდან"
+            "value" : "წაშალე კოლექციიდან"
           }
         }
       }
