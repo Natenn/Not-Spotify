@@ -11,11 +11,13 @@ import SwiftNetwork
 // MARK: - PlaylistViewModel
 
 final class PlaylistViewModel: ObservableObject {
-    @Published var tracks = [Track]()
+    @Published private(set) var tracks = [Track]()
 
     @Published var areSaved = [String: Bool]()
 
     @Published var isShowingSheet = false
+    
+    private var network: Networkable
 
     var id: String
     var snapshotId: String
@@ -27,7 +29,9 @@ final class PlaylistViewModel: ObservableObject {
     private let offset = 20
     private(set) var currentOffset = 0
 
-    init(id: String, snapshotId: String, ownerId: String, name: LocalizedStringResource, total: Int, endpoint: String) {
+    init(network: Networkable = Network.shared, id: String, snapshotId: String, ownerId: String, name: LocalizedStringResource, total: Int, endpoint: String) {
+        self.network = network
+        
         self.id = id
         self.snapshotId = snapshotId
         self.ownerId = ownerId
@@ -50,7 +54,7 @@ final class PlaylistViewModel: ObservableObject {
         )
 
         Task {
-            try await Network.shared.execute(request, expecting: TracksResponse.self, success: { response in
+            try await network.execute(request, expecting: TracksResponse.self, success: { response in
                 DispatchQueue.main.async { [weak self] in
                     let tracks = response.items.map { $0.track }
 
@@ -64,7 +68,7 @@ final class PlaylistViewModel: ObservableObject {
                         self?.checkSavedTracks(by: track.id)
                     }
                 }
-            })
+            }, failure: { _ in })
         }
     }
 

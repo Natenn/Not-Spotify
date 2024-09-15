@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Not-SpotifyTests/TestPlan.xctestplan"
+            reference = "container:Not-SpotifyTests/Test Plan/Not-Spotify.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

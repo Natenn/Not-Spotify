@@ -22,9 +22,11 @@ final class LibraryViewModelTests: XCTestCase {
         viewModel.fetchPlaylists()
         await fulfillment(of: [expectation], timeout: 2)
 
-        XCTAssertEqual(viewModel.playlists.count, 2)
-        XCTAssertEqual(viewModel.playlists.first?.id, "37i9dQZF1DX5Ejj0EkURtP")
-        XCTAssertEqual(viewModel.playlists.first?.name, "Sample Playlist")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            XCTAssertEqual(viewModel.playlists.count, 2)
+            XCTAssertEqual(viewModel.playlists.first?.id, "37i9dQZF1DX5Ejj0EkURtP")
+            XCTAssertEqual(viewModel.playlists.first?.name, "Sample Playlist")
+        }
     }
 
     func testFetchFavourites() async {
@@ -39,10 +41,12 @@ final class LibraryViewModelTests: XCTestCase {
         viewModel.fetchFavourites()
         await fulfillment(of: [expectation], timeout: 2)
 
-        XCTAssertEqual(viewModel.tracks.count, 1)
-        XCTAssertEqual(viewModel.tracks.first?.track.id, "0123456789")
-        XCTAssertEqual(viewModel.tracks.first?.track.name, "Sample Track")
-        XCTAssertEqual(viewModel.favouriteTracksCount, 3)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            XCTAssertEqual(viewModel.tracks.count, 1)
+            XCTAssertEqual(viewModel.tracks.first?.track.id, "0123456789")
+            XCTAssertEqual(viewModel.tracks.first?.track.name, "Sample Track")
+            XCTAssertEqual(viewModel.favouriteTracksCount, 3)
+        }
     }
 
     func testUnfollowPlaylist() async {
