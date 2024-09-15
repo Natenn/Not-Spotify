@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Natenn/SwiftNetwork",
       "state" : {
-        "branch" : "unit_tests/setup",
-        "revision" : "6be907efd0fb163851902ca3d8a3703780fc5bc5"
+        "branch" : "main",
+        "revision" : "82c7a54af5e432ef0d705b29da1a2d74f6d2dcc2"
       }
     }
   ],
