@@ -56,7 +56,7 @@ final class AuthViewModel: ObservableObject {
         )
 
         Task {
-            try await SwiftNetwork.shared.execute(request, expecting: AuthResponse.self, success: { response in
+            try await SwiftNetwork().execute(request, expecting: AuthResponse.self, success: { response in
                 DispatchQueue.main.async {
                     AuthManager.shared.isAuthorised = true
                     AuthManager.shared.cacheUserDefaults(response)

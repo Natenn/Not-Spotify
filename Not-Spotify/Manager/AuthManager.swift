@@ -84,7 +84,7 @@ final class AuthManager: ObservableObject {
         )
 
         Task {
-            try await SwiftNetwork.shared.execute(request, expecting: AuthResponse.self, success: { [weak self] response in
+            try await SwiftNetwork().execute(request, expecting: AuthResponse.self, success: { [weak self] response in
                 self?.cacheUserDefaults(response)
                 Network.shared.configureDefaultRequest()
 

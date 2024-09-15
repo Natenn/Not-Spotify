@@ -15,12 +15,18 @@ final class LibraryViewModel: ObservableObject {
     @Published private(set) var tracks: [SavedTrackObject] = []
     @Published private(set) var favouriteTracksCount: Int = 0
 
+    private let network: Networkable
+
     @Published var isShowingSheet = false
     @Published var name: String = ""
     @Published var description: String = ""
 
     var isDisabled: Bool {
         name.isEmpty
+    }
+    
+    init(network: Networkable = Network.shared) {
+        self.network = network
     }
 
     private var total = 0
@@ -37,7 +43,7 @@ final class LibraryViewModel: ObservableObject {
         )
 
         Task {
-            try await Network.shared.execute(request, expecting: PlaylistsResponse.self, success: { response in
+            try await network.execute(request, expecting: PlaylistsResponse.self, success: { response in
                 DispatchQueue.main.async { [weak self] in
                     if shouldOverwrite {
                         self?.playlists = []
@@ -46,7 +52,7 @@ final class LibraryViewModel: ObservableObject {
                     self?.currentOffset += response.items.count
                     self?.total = response.total
                 }
-            })
+            }, failure: { _ in })
         }
     }
 
@@ -60,12 +66,12 @@ final class LibraryViewModel: ObservableObject {
         )
 
         Task {
-            try await Network.shared.execute(request, expecting: TracksResponse.self, success: { response in
+            try await network.execute(request, expecting: TracksResponse.self, success: { response in
                 DispatchQueue.main.async { [weak self] in
                     self?.tracks = response.items
                     self?.favouriteTracksCount = response.total
                 }
-            })
+            }, failure: { _ in })
         }
     }
 
@@ -76,13 +82,13 @@ final class LibraryViewModel: ObservableObject {
         )
 
         Task {
-            try await Network.shared.execute(request, expecting: EmptyResponse.self, success: { _ in
+            try await network.execute(request, expecting: EmptyResponse.self, success: { _ in
                 DispatchQueue.main.async { [weak self] in
                     self?.playlists.removeAll(where: {
                         $0.id == playlistId
                     })
                 }
-            })
+            }, failure: { _ in })
         }
     }
 
@@ -111,7 +117,7 @@ extension LibraryViewModel {
         )
 
         Task {
-            try await Network.shared.execute(
+            try await network.execute(
                 request,
                 expecting: SimplifiedPlaylistObject.self,
                 success: { _ in
@@ -121,7 +127,7 @@ extension LibraryViewModel {
                         self?.name = ""
                         self?.description = ""
                     }
-                }
+                }, failure: { _ in }
             )
         }
     }

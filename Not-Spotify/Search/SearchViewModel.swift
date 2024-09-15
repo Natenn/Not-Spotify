@@ -12,6 +12,8 @@ import SwiftNetwork
 
 final class SearchViewModel: ObservableObject {
     @Published var searchResults = [SearchResult]()
+    
+    private var network: Networkable
 
     @Published var areSaved = [String: Bool]()
     @Published var areCollected = [String: Bool]()
@@ -21,6 +23,10 @@ final class SearchViewModel: ObservableObject {
 
     private let offset = 10
     private var currentOffset = 0
+    
+    init(network: Networkable = Network.shared) {
+        self.network = network
+    }
 
     func fetchItems(shouldOverwrite: Bool = true) {
         guard !query.isEmpty else {
@@ -38,7 +44,7 @@ final class SearchViewModel: ObservableObject {
         )
 
         Task {
-            try await Network.shared.execute(request, expecting: SearchResponseModel.self, success: { response in
+            try await network.execute(request, expecting: SearchResponseModel.self, success: { response in
                 DispatchQueue.main.async { [weak self] in
                     if shouldOverwrite {
                         self?.searchResults = []
@@ -62,7 +68,7 @@ final class SearchViewModel: ObservableObject {
 
                     self?.currentOffset += response.playlists.items.count + response.tracks.items.count
                 }
-            })
+            }, failure: { _ in })
         }
     }
 

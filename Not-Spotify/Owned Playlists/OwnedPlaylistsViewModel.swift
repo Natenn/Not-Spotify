@@ -12,9 +12,15 @@ final class OwnedPlaylistsViewModel: ObservableObject {
     @Published private(set) var playlists = [SimplifiedPlaylistObject]()
     @Published var isShowingSheet = false
 
+    private var network: Networkable
+    
     private var total = 0
     private let offset = 20
     private var currentOffset = 0
+    
+    init(network: Networkable = Network.shared) {
+        self.network = network
+    }
 
     var shouldFetchMorePlaylists: Bool {
         !playlists.isEmpty && currentOffset < total
@@ -30,7 +36,7 @@ final class OwnedPlaylistsViewModel: ObservableObject {
         )
 
         Task {
-            try await Network.shared.execute(
+            try await network.execute(
                 request,
                 expecting: PlaylistsResponse.self,
                 success: { [weak self] response in
@@ -43,7 +49,7 @@ final class OwnedPlaylistsViewModel: ObservableObject {
                     DispatchQueue.main.async { [weak self] in
                         self?.playlists.append(contentsOf: ownedPlaylists)
                     }
-                }
+                }, failure: { _ in }
             )
         }
     }
@@ -58,12 +64,12 @@ final class OwnedPlaylistsViewModel: ObservableObject {
         )
 
         Task {
-            try await Network.shared.execute(
+            try await network.execute(
                 request,
                 expecting: PlaylistSnapshotId.self,
                 success: { _ in
                     completion()
-                }
+                }, failure: { _ in }
             )
         }
     }
