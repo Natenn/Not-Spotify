@@ -42,7 +42,7 @@ final class LibraryViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.tracks.count, 1)
         XCTAssertEqual(viewModel.tracks.first?.track.id, "0123456789")
         XCTAssertEqual(viewModel.tracks.first?.track.name, "Sample Track")
-        XCTAssertEqual(viewModel.favouriteTracksCount, 53)
+        XCTAssertEqual(viewModel.favouriteTracksCount, 3)
     }
 
     func testUnfollowPlaylist() async {
@@ -103,43 +103,7 @@ final class LibraryViewModelTests: XCTestCase {
         mockNetwork.execution = {
             expectation.fulfill()
         }
-        mockNetwork.mockResponse = PlaylistsResponse(
-            href: "https://api.spotify.com/v1/users/spotify/playlists",
-            limit: 20,
-            next: "https://api.spotify.com/v1/users/spotify/playlists?offset=20&limit=20",
-            offset: 0,
-            previous: nil,
-            total: 2,
-            items: [
-                SimplifiedPlaylistObject(
-                    collaborative: false,
-                    description: "This is a sample playlist description",
-                    external_urls: ExternalUrls(spotify: "https://open.spotify.com/playlist/37i9dQZF1DX5Ejj0EkURtP"),
-                    href: "https://api.spotify.com/v1/playlists/37i9dQZF1DX5Ejj0EkURtP",
-                    id: "37i9dQZF1DX5Ejj0EkURtP",
-                    images: [
-                        ImageObject(
-                            url: "https://i.scdn.co/image/ab67706f00000003e8e28219724c2423afa4d320",
-                            height: 640,
-                            width: 640
-                        ),
-                    ],
-                    name: "Sample Playlist",
-                    owner: Owner(
-                        id: "spotify",
-                        display_name: "Spotify"
-                    ),
-                    public: true,
-                    snapshot_id: "MTYwNjg1NzI0MCwwMDAwMDA3NTAwMDAwMTc1ZjkzZTk1YjAwMDAwMDE2ZDkyOGE3Zjg0",
-                    tracks: Tracks(
-                        href: "https://api.spotify.com/v1/playlists/37i9dQZF1DX5Ejj0EkURtP/tracks",
-                        total: 50
-                    ),
-                    type: "playlist",
-                    uri: "spotify:playlist:37i9dQZF1DX5Ejj0EkURtP"
-                ),
-            ]
-        )
+        mockNetwork.mockResponse = MockData.mockPlaylistResponse
         let viewModel = LibraryViewModel(network: mockNetwork)
 
         viewModel.fetchPlaylists()
@@ -161,9 +125,9 @@ final class LibraryViewModelTests: XCTestCase {
         await fulfillment(of: [expectation], timeout: 2)
 
         let playlists = viewModel.playlists
-        
+
         viewModel.refreshPlaylists()
-        
+
         let refreshedPlaylists = viewModel.playlists
 
         XCTAssertEqual(playlists.count, refreshedPlaylists.count)

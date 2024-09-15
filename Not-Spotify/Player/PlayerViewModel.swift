@@ -44,7 +44,7 @@ final class PlayerViewModel: ObservableObject {
     @Published private(set) var currentItem: AVPlayerItem?
     @Published private(set) var rate: Float?
     @Published var currentProgress: Float = 0
-    @Published var isSaved: Bool = false
+    @Published private(set) var isSaved: Bool = false
 
     var trackInfo: TrackInfo {
         guard !tracks.isEmpty else {
@@ -274,7 +274,7 @@ final class PlayerViewModel: ObservableObject {
     }
 
     func toggleSavedTrack() {
-        guard index < tracks.count else {
+        guard index < tracks.count, index >= 0 else {
             return
         }
 
@@ -369,7 +369,7 @@ final class PlayerViewModel: ObservableObject {
         }
     }
 
-    enum PlayerScrubState {
+    enum PlayerScrubState: Equatable {
         case reset
         case scrollStarted
         case scrollEnded(Float)
