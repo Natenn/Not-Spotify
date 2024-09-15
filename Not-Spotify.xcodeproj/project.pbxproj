@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9305C3572C975EC90021BBED /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 9305C3562C975EC90021BBED /* SwiftNetwork */; };
 		931758EC2C95CDA30047629F /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 931758EB2C95CDA30047629F /* SwiftNetwork */; };
 		935C87462C8C4FE100CCC85A /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 935C87452C8C4FE100CCC85A /* SwiftNetwork */; };
 		935C87492C8C7CA100CCC85A /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 935C87482C8C7CA100CCC85A /* SwiftNetwork */; };
 		938BDE8F2C88943100DB8A15 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 938BDE8E2C88943100DB8A15 /* SwiftNetwork */; };
 		9396B1DD2C7B6554005C1B75 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9396B1DC2C7B6554005C1B75 /* Localizable.xcstrings */; };
 		939DF1872C95F677008B6DD9 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 939DF1862C95F677008B6DD9 /* SwiftNetwork */; };
+		939E78A22C9764B9009CE474 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 939E78A12C9764B9009CE474 /* SwiftNetwork */; };
 		93BEB2352C95CA420083DF45 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 93BEB2342C95CA420083DF45 /* SwiftNetwork */; };
 		93BEB2382C95CC5C0083DF45 /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 93BEB2372C95CC5C0083DF45 /* SwiftNetwork */; };
 		93E1E08E2C96111E0050A5AE /* SwiftNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 93E1E08D2C96111E0050A5AE /* SwiftNetwork */; };
@@ -57,7 +57,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				93E1E0912C9623620050A5AE /* SwiftNetwork in Frameworks */,
-				9305C3572C975EC90021BBED /* SwiftNetwork in Frameworks */,
+				939E78A22C9764B9009CE474 /* SwiftNetwork in Frameworks */,
 				935C87492C8C7CA100CCC85A /* SwiftNetwork in Frameworks */,
 				93BEB2382C95CC5C0083DF45 /* SwiftNetwork in Frameworks */,
 				939DF1872C95F677008B6DD9 /* SwiftNetwork in Frameworks */,
@@ -127,7 +127,7 @@
 				939DF1862C95F677008B6DD9 /* SwiftNetwork */,
 				93E1E08D2C96111E0050A5AE /* SwiftNetwork */,
 				93E1E0902C9623620050A5AE /* SwiftNetwork */,
-				9305C3562C975EC90021BBED /* SwiftNetwork */,
+				939E78A12C9764B9009CE474 /* SwiftNetwork */,
 			);
 			productName = "Not-Spotify";
 			productReference = 932B1D4E2C76424000A28A39 /* Not-Spotify.app */;
@@ -186,7 +186,7 @@
 			);
 			mainGroup = 932B1D452C76424000A28A39;
 			packageReferences = (
-				9305C3552C975EC90021BBED /* XCRemoteSwiftPackageReference "SwiftNetwork" */,
+				939E78A02C9764B9009CE474 /* XCRemoteSwiftPackageReference "SwiftNetwork" */,
 			);
 			productRefGroup = 932B1D4F2C76424000A28A39 /* Products */;
 			projectDirPath = "";
@@ -496,22 +496,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		9305C3552C975EC90021BBED /* XCRemoteSwiftPackageReference "SwiftNetwork" */ = {
+		939E78A02C9764B9009CE474 /* XCRemoteSwiftPackageReference "SwiftNetwork" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Natenn/SwiftNetwork";
 			requirement = {
-				branch = main;
+				branch = tmp/demo;
 				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9305C3562C975EC90021BBED /* SwiftNetwork */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9305C3552C975EC90021BBED /* XCRemoteSwiftPackageReference "SwiftNetwork" */;
-			productName = SwiftNetwork;
-		};
 		931758EB2C95CDA30047629F /* SwiftNetwork */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftNetwork;
@@ -530,6 +525,11 @@
 		};
 		939DF1862C95F677008B6DD9 /* SwiftNetwork */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = SwiftNetwork;
+		};
+		939E78A12C9764B9009CE474 /* SwiftNetwork */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 939E78A02C9764B9009CE474 /* XCRemoteSwiftPackageReference "SwiftNetwork" */;
 			productName = SwiftNetwork;
 		};
 		93BEB2342C95CA420083DF45 /* SwiftNetwork */ = {
