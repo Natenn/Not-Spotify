@@ -75,7 +75,6 @@ final class PlaylistViewModelTests: XCTestCase {
         viewModel.fetchSongs()
         await fulfillment(of: [expectation], timeout: 2)
 
-        print("assert:", viewModel.shouldFetchMoreSongs)
         XCTAssertFalse(viewModel.shouldFetchMoreSongs)
     }
 

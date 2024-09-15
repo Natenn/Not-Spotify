@@ -250,7 +250,7 @@ enum MockData {
                 ],
                 name: "Sample Playlist",
                 owner: Owner(
-                    id: "spotify",
+                    id: "",
                     display_name: "Spotify"
                 ),
                 public: true,
